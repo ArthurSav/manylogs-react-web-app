@@ -1,24 +1,28 @@
 import React from "react";
 import AppItem from "./components/AppItem";
 import MyApps from "./pages/MyApps";
+import AppControl from "./AppControl";
 import { Grommet, Box, Grid, Button } from "grommet";
+import { grommet } from "grommet/themes";
 
 function App() {
   return (
-    <Grommet full theme={theme}>
+    <Grommet full theme={grommet}>
       <Box
         align="center"
         justify="center"
-        background={{
-          color: "accent-4",
-          opacity: "medium",
-          image:
-            "url('https://blog.hdwallsource.com/wp-content/uploads/2014/11/gradient-26052-26737-hd-wallpapers.jpg.png')",
-        }}
+        background={{ color: "dark-1" }}
+        // background={{
+        //   color: "accent-4",
+        //   opacity: "medium",
+        //   image:
+        //     "url('https://blog.hdwallsource.com/wp-content/uploads/2014/11/gradient-26052-26737-hd-wallpapers.jpg.png')",
+        // }}
         overflow="auto"
         fill="vertical"
       >
-        <MyApps />
+        <AppControl />
+        {/* <MyApps /> */}
       </Box>
     </Grommet>
   );

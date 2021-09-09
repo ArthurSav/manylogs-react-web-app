@@ -1,6 +1,6 @@
 import { Box, Grid, Heading } from "grommet";
 import AppItem from "../components/AppItem";
-import { mockApps } from "../mockApps";
+import { mockApps } from "../mocks/mockApps";
 
 const MyApps = () => {
   return (
