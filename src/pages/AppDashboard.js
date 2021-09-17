@@ -9,8 +9,9 @@ import {
 } from "grommet";
 
 import { Edit } from "grommet-icons";
+import SecretMenu from "./SecretMenu";
 
-const AppControl = () => {
+const AppDashboard = () => {
   return (
     <Box
       fill="vertical"
@@ -24,6 +25,7 @@ const AppControl = () => {
       <PanelApp />
       {/* <PanelLogs /> */}
       {/* <PanelLogDetails /> */}
+      <SecretMenu />
     </Box>
   );
 };
@@ -404,4 +406,4 @@ const PanelLogDetails = () => {
   );
 };
 
-export default AppControl;
+export default AppDashboard;

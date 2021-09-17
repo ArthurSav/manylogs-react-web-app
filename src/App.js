@@ -1,28 +1,50 @@
 import React from "react";
-import AppItem from "./components/AppItem";
 import MyApps from "./pages/MyApps";
-import AppControl from "./AppControl";
 import { Grommet, Box, Grid, Button } from "grommet";
 import { grommet } from "grommet/themes";
+import Signin from "./pages/Signin";
+import { Switch, Route, Router, Redirect } from "react-router";
+import { createBrowserHistory } from "history";
+import AppDashboard from "./pages/AppDashboard";
+import { isAuthenticated } from "./context";
+
+const hist = createBrowserHistory();
 
 function App() {
+  const auth = isAuthenticated();
+  console.log("authenticated: " + auth);
   return (
     <Grommet full theme={grommet}>
       <Box
         align="center"
         justify="center"
         background={{ color: "dark-1" }}
-        // background={{
-        //   color: "accent-4",
-        //   opacity: "medium",
-        //   image:
-        //     "url('https://blog.hdwallsource.com/wp-content/uploads/2014/11/gradient-26052-26737-hd-wallpapers.jpg.png')",
-        // }}
         overflow="auto"
         fill="vertical"
       >
-        <AppControl />
-        {/* <MyApps /> */}
+        <Router history={hist}>
+          <Switch>
+            <Route
+              path="/signin"
+              render={(props) => {
+                return <Signin />;
+              }}
+              key="login"
+            />
+            <Route
+              path="/apps"
+              render={(props) => {
+                return <MyApps />;
+              }}
+              key="apps"
+            />
+            {auth ? (
+              <Redirect from="/" to="/apps" />
+            ) : (
+              <Redirect from="/" to="/signin" />
+            )}
+          </Switch>
+        </Router>
       </Box>
     </Grommet>
   );

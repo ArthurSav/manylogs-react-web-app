@@ -1,13 +1,8 @@
 import { Box, Card, Text, Menu } from "grommet";
 
-const AppItem = ({ id, name, connected }) => {
+const AppItem = ({ id, name, isConnected }) => {
   return (
-    <Card
-      width="large"
-      background={{ color: "light-1" }}
-      pad="small"
-      gap="small"
-    >
+    <Card background={{ color: "light-1" }} pad="small" gap="small">
       <Box
         align="center"
         justify="center"
@@ -28,12 +23,12 @@ const AppItem = ({ id, name, connected }) => {
           {name}
         </Text>
         <Box align="center" justify="start" direction="row-responsive">
-          <Text size="large">{connected ? "online" : "offline"}</Text>
+          <Text size="large">{isConnected ? "online" : "offline"}</Text>
           <Box
             align="center"
             justify="center"
             background={
-              connected ? { color: "accent-1" } : { color: "accent-2" }
+              isConnected ? { color: "accent-1" } : { color: "accent-2" }
             }
             pad="xsmall"
             round="medium"
