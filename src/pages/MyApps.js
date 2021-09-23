@@ -1,37 +1,38 @@
-import { Box, Grid, Heading } from "grommet";
+import { Box, Button, Grid, Heading } from "grommet";
 import AppItem from "../components/AppItem";
-import { mockApps } from "../mocks/mockApps";
 import { useEffect, useState } from "react";
 import SecretMenu from "./SecretMenu";
 import { openMyAppsSocket } from "../api/ManylogsSockets";
+import { Link, Redirect } from "react-router-dom";
 
 const MyApps = () => {
   const [apps, setApps] = useState([]);
   const onAppsLoaded = (loadedApps) => {
-    setApps(loadedApps);
+    setApps([...loadedApps]);
   };
 
   const onAppEvent = (event) => {
     console.log("onAppEvent: " + event.operation);
     switch (event.operation) {
       case "insert": {
-        console.log("case insert");
-        setApps([...apps, event.app]);
+        setApps((apps) => [...apps, event.app]);
         break;
       }
       case "update":
       case "replace": {
-        console.log("case update/replace");
-        const updated = apps.map((app) =>
-          app.id === event.appId ? event.app : app
-        );
-        setApps(updated);
+        setApps((apps) => {
+          const updated = apps.map((app) =>
+            app.id === event.appId ? event.app : app
+          );
+          return [...updated];
+        });
         break;
       }
       case "delete": {
-        console.log("case delete");
-        const updated = apps.filter((app) => app.id !== event.appId);
-        setApps(updated);
+        setApps((apps) => {
+          const updated = apps.filter((app) => app.id !== event.appId);
+          return [...updated];
+        });
         break;
       }
     }
@@ -44,9 +45,14 @@ const MyApps = () => {
     };
   }, []);
 
+  useEffect(() => {
+    console.log("(final)apps: " + apps.length);
+    console.log(apps);
+  }, [apps]);
+
   return (
     <Box align="start" justify="center">
-      <Heading margin={{ left: "small" }}> My Apps</Heading>
+      <Heading margin={{ left: "small" }}>My Apps</Heading>
       <Box
         overflow="auto"
         pad="large"
@@ -62,6 +68,7 @@ const MyApps = () => {
         </Grid>
       </Box>
       <SecretMenu />
+      <Link to="/app">App</Link>
     </Box>
   );
 };

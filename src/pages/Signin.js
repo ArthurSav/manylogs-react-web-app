@@ -9,7 +9,7 @@ import {
 } from "grommet";
 import { useState } from "react";
 import { requestSignin } from "../api/ManylogsApi";
-import { Redirect } from "react-router";
+import { Redirect } from "react-router-dom";
 
 const Signin = () => {
   const [value, setValue] = useState({ email: "", password: "" });

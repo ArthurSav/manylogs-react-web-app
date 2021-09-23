@@ -3,7 +3,7 @@ import MyApps from "./pages/MyApps";
 import { Grommet, Box, Grid, Button } from "grommet";
 import { grommet } from "grommet/themes";
 import Signin from "./pages/Signin";
-import { Switch, Route, Router, Redirect } from "react-router";
+import { Switch, Route, Router, Redirect, Link } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import AppDashboard from "./pages/AppDashboard";
 import { isAuthenticated } from "./context";
@@ -24,19 +24,18 @@ function App() {
       >
         <Router history={hist}>
           <Switch>
+            <Route path="/signin" render={(props) => <Signin />} key="login" />
             <Route
-              path="/signin"
-              render={(props) => {
-                return <Signin />;
-              }}
-              key="login"
+              exact
+              path="/apps"
+              render={(props) => <MyApps />}
+              key="apps"
             />
             <Route
-              path="/apps"
-              render={(props) => {
-                return <MyApps />;
-              }}
-              key="apps"
+              exact
+              path="/apps/:id"
+              render={(props) => <AppDashboard />}
+              key="app"
             />
             {auth ? (
               <Redirect from="/" to="/apps" />

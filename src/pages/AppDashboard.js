@@ -9,32 +9,79 @@ import {
 } from "grommet";
 
 import { Edit } from "grommet-icons";
-import SecretMenu from "./SecretMenu";
+import { useParams } from "react-router";
+import React, { useEffect, useState, useContext } from "react";
+import { WSManagerAppDetails } from "../api/ManylogsSockets";
+
+const DashboardContext = React.createContext();
 
 const AppDashboard = () => {
+  const appId = useParams().id;
+  const [app, setApp] = useState();
+  const [socketManager] = useState(() => WSManagerAppDetails(appId));
+
+  const onAppLoaded = (app) => {
+    setApp({ ...app });
+  };
+
+  const onAppEvent = (event) => {
+    if (event.operation == "update") {
+      setApp(event.app);
+    }
+  };
+
+  const updateAppSettings = (args) => {
+    setApp((app) => {
+      const updated = { ...app, ...args };
+      socketManager?.updateSettings(updated);
+      return updated;
+    });
+  };
+
+  useEffect(() => {
+    socketManager?.start(onAppLoaded, onAppEvent);
+    return () => {
+      socketManager?.stop();
+    };
+  }, []);
+
   return (
-    <Box
-      fill="vertical"
-      overflow="auto"
-      align="center"
-      flex="grow"
-      justify="center"
-      direction="row-responsive"
-      gap="small"
+    <DashboardContext.Provider
+      value={{ app: app, setApp: setApp, updateAppSettings: updateAppSettings }}
     >
-      <PanelApp />
-      {/* <PanelLogs /> */}
-      {/* <PanelLogDetails /> */}
-      <SecretMenu />
-    </Box>
+      <Box
+        fill="vertical"
+        overflow="auto"
+        align="center"
+        flex="grow"
+        justify="center"
+        direction="row-responsive"
+        gap="small"
+      >
+        {app && <PanelApp key="panelApp" />}
+      </Box>
+    </DashboardContext.Provider>
   );
 };
 
-const PanelApp = (props) => {
-  // const { id, name, connected, record, replay, activeProfile, profiles } = props;
-  // const [record, setRecord] = useState(props.record);
-  // const [replay, setReplay] = useState(props.replay);
-  // const [activeProfileId, setActiveProfileId] = useState(props.activeProfileId);
+const PanelApp = () => {
+  const { app, setApp, updateAppSettings } = useContext(DashboardContext);
+  const { id, name, isConnected, isReplayEnabled, isRecordEnabled } = app;
+
+  // profiles
+  const profiles = app.profiles.map((p) => p.name);
+  const selectedProfileName = app.profiles.find(
+    (p) => p.id === app.activeProfileId
+  ).name;
+
+  const updateSelectedProfile = (value) => {
+    const profile = app.profiles.find((p) => p.name === value);
+    updateAppSettings({ activeProfileId: profile.id });
+  };
+
+  const setChecked = (args) => {
+    updateAppSettings({ ...args });
+  };
 
   return (
     <Box
@@ -45,7 +92,7 @@ const PanelApp = (props) => {
       gap="none"
       direction="row-responsive"
       pad="small"
-      height="xlarge"
+      height="large"
     >
       <Box
         align="center"
@@ -83,16 +130,21 @@ const PanelApp = (props) => {
             gap="xsmall"
           >
             <Text size="xlarge" weight="bold">
-              iphoneXYZ
+              {name}
             </Text>
             <Box align="center" justify="start" direction="row-responsive">
-              <Text size="large">online</Text>
+              <Text size="medium">{isConnected ? "online" : "offline"}</Text>
               <Box
                 align="center"
                 justify="center"
-                background={{ dark: false, color: "accent-1" }}
+                background={
+                  isConnected
+                    ? { color: "status-ok" }
+                    : { color: "status-disabled" }
+                }
                 pad="xsmall"
                 round="medium"
+                border={{ color: "light-3", size: "xsmall", side: "all" }}
                 margin={{ left: "xsmall" }}
               />
             </Box>
@@ -105,8 +157,9 @@ const PanelApp = (props) => {
           direction="row-responsive"
         >
           <Select
-            options={["User John", "User Pro", "Another One"]}
-            placeholder="Default Profile"
+            options={profiles}
+            value={selectedProfileName}
+            onChange={({ option }) => updateSelectedProfile(option)}
           />
         </Box>
         <Box
@@ -125,8 +178,24 @@ const PanelApp = (props) => {
             pad="xsmall"
             gap="medium"
           >
-            <CheckBox label="Record" toggle reverse />
-            <CheckBox label="Replay" toggle reverse />
+            <CheckBox
+              label="Record"
+              toggle
+              reverse
+              checked={isRecordEnabled}
+              onChange={(event) =>
+                setChecked({ isRecordEnabled: event.target.checked })
+              }
+            />
+            <CheckBox
+              label="Replay"
+              toggle
+              reverse
+              checked={isReplayEnabled}
+              onChange={(event) =>
+                setChecked({ isReplayEnabled: event.target.checked })
+              }
+            />
           </Box>
         </Box>
       </Box>

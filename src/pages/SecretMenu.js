@@ -1,6 +1,6 @@
 import { Box, Menu } from "grommet";
 import { useState } from "react";
-import { Redirect } from "react-router";
+import { Redirect } from "react-router-dom";
 import { clearUserSession } from "../context";
 
 const SecretMenu = () => {
