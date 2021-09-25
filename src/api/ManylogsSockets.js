@@ -53,7 +53,7 @@ export const WSManagerAppDetails = (appId) => {
   var isAuthenticated = false;
   const token = session().token;
 
-  const start = (onAppLoaded, onAppEvent) => {
+  const start = (onAppLoaded, onAppEvent, onAppLogs) => {
     ws = new WebSocket("ws://localhost:8080/web/apps/details");
     ws.onopen = () => {
       console.log("(socket open)");
@@ -76,6 +76,10 @@ export const WSManagerAppDetails = (appId) => {
           }
           case "app_event": {
             onAppEvent(data.event);
+            break;
+          }
+          case "app_profile_logs": {
+            onAppLogs(data.logs);
             break;
           }
         }
@@ -107,6 +111,10 @@ export const WSManagerAppDetails = (appId) => {
             type: "app",
             appId: appId,
           },
+          {
+            type: "app_profile_logs",
+            appId: appId,
+          },
         ],
       })
     );
@@ -114,20 +122,27 @@ export const WSManagerAppDetails = (appId) => {
 
   // update
 
-  const sendUpdateAppSettings = (args) => {
-    const payload = {
-      messages: [
-        {
-          type: "app_update_settings",
-          appId: appId,
-          settings: {
-            activeProfileId: args.activeProfileId,
-            isRecordEnabled: args.isRecordEnabled,
-            isReplayEnabled: args.isReplayEnabled,
-          },
-        },
-      ],
-    };
+  const requestUpdateSettings = (args, isProfileUpdated) => {
+    const messages = [];
+    messages.push({
+      type: "app_update_settings",
+      appId: appId,
+      settings: {
+        activeProfileId: args.activeProfileId,
+        isRecordEnabled: args.isRecordEnabled,
+        isReplayEnabled: args.isReplayEnabled,
+      },
+    });
+
+    if (isProfileUpdated) {
+      messages.push({
+        type: "app_profile_logs",
+        appId: appId,
+        profileId: args.activeProfileId,
+      });
+    }
+
+    const payload = { messages: messages };
 
     ws.send(JSON.stringify(payload));
   };
@@ -135,6 +150,6 @@ export const WSManagerAppDetails = (appId) => {
   return {
     start: start,
     stop: stop,
-    updateSettings: sendUpdateAppSettings,
+    updateSettings: requestUpdateSettings,
   };
 };

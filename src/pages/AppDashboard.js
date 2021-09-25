@@ -12,12 +12,14 @@ import { Edit } from "grommet-icons";
 import { useParams } from "react-router";
 import React, { useEffect, useState, useContext } from "react";
 import { WSManagerAppDetails } from "../api/ManylogsSockets";
+import { ListLogItem } from "../components/ListLogItem";
 
 const DashboardContext = React.createContext();
 
 const AppDashboard = () => {
   const appId = useParams().id;
   const [app, setApp] = useState();
+  const [logs, setLogs] = useState();
   const [socketManager] = useState(() => WSManagerAppDetails(appId));
 
   const onAppLoaded = (app) => {
@@ -30,36 +32,44 @@ const AppDashboard = () => {
     }
   };
 
+  const onAppLogs = (logs) => {
+    setLogs([...logs]);
+  };
+
   const updateAppSettings = (args) => {
     setApp((app) => {
       const updated = { ...app, ...args };
-      socketManager?.updateSettings(updated);
+      const isProfileUpdated = app.activeProfileId !== updated.activeProfileId;
+      socketManager?.updateSettings(updated, isProfileUpdated);
       return updated;
     });
   };
 
   useEffect(() => {
-    socketManager?.start(onAppLoaded, onAppEvent);
+    socketManager?.start(onAppLoaded, onAppEvent, onAppLogs);
     return () => {
       socketManager?.stop();
     };
   }, []);
 
   return (
-    <DashboardContext.Provider
-      value={{ app: app, setApp: setApp, updateAppSettings: updateAppSettings }}
-    >
-      <Box
-        fill="vertical"
-        overflow="auto"
-        align="center"
-        flex="grow"
-        justify="center"
-        direction="row-responsive"
-        gap="small"
-      >
-        {app && <PanelApp key="panelApp" />}
-      </Box>
+    <DashboardContext.Provider value={{ app, setApp, updateAppSettings, logs }}>
+      {app ? (
+        <Box
+          fill="vertical"
+          overflow="auto"
+          align="center"
+          flex="grow"
+          justify="center"
+          direction="row-responsive"
+          gap="small"
+        >
+          <PanelApp key="panelApp" />
+          {logs && <PanelLogs key="panelLogs" />}
+        </Box>
+      ) : (
+        <Text>Loading...</Text>
+      )}
     </DashboardContext.Provider>
   );
 };
@@ -204,12 +214,13 @@ const PanelApp = () => {
 };
 
 const PanelLogs = () => {
+  const { logs } = useContext(DashboardContext);
   return (
     <Box
       align="start"
       justify="start"
       width="large"
-      height="xlarge"
+      height="large"
       round="medium"
       pad="small"
       gap="xxsmall"
@@ -226,51 +237,9 @@ const PanelLogs = () => {
         responsive
         flex="grow"
       >
-        <Box
-          align="center"
-          justify="center"
-          direction="row-responsive"
-          gap="xsmall"
-          fill="horizontal"
-          background={{ color: "dark-3" }}
-          pad="xsmall"
-          round="xsmall"
-        >
-          <Box
-            align="center"
-            justify="center"
-            pad="small"
-            round="xsmall"
-            background={{ color: "graph-3", opacity: "medium" }}
-          >
-            <Text weight="bold" size="small">
-              GET
-            </Text>
-          </Box>
-          <Box
-            align="center"
-            justify="center"
-            pad="small"
-            round="xsmall"
-            background={{ color: "accent-1", opacity: "medium" }}
-          >
-            <Text weight="bold" size="small">
-              200
-            </Text>
-          </Box>
-          <Box
-            align="start"
-            justify="start"
-            pad="xsmall"
-            round="small"
-            fill="horizontal"
-          >
-            <Text weight="bold" size="medium">
-              /v1/posts
-            </Text>
-            <Text size="xsmall">https://www.box.com/v1/posts?id=1</Text>
-          </Box>
-        </Box>
+        {logs.map((item) => {
+          return <ListLogItem key={item._id} item={item} />;
+        })}
       </Box>
     </Box>
   );
