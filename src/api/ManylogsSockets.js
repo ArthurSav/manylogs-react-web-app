@@ -53,7 +53,7 @@ export const WSManagerAppDetails = (appId) => {
   var isAuthenticated = false;
   const token = session().token;
 
-  const start = (onAppLoaded, onAppEvent, onAppLogs) => {
+  const start = (onAppLoaded, onAppEvent, onAppLogs, onLogEvent) => {
     ws = new WebSocket("ws://localhost:8080/web/apps/details");
     ws.onopen = () => {
       console.log("(socket open)");
@@ -80,6 +80,10 @@ export const WSManagerAppDetails = (appId) => {
           }
           case "app_profile_logs": {
             onAppLogs(data.logs);
+            break;
+          }
+          case "app_profile_log_event": {
+            onLogEvent(data.eventLog);
             break;
           }
         }

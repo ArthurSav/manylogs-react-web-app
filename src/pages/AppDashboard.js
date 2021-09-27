@@ -36,6 +36,17 @@ const AppDashboard = () => {
     setLogs([...logs]);
   };
 
+  const onLogEvent = (event) => {
+    if (event.operation === "insert") {
+      setLogs((logs) => [event.log, ...logs]);
+    } else if (event.operation === "update") {
+      setLogs((logs) => {
+        const filtered = logs.filter((item) => item._id !== event.log._id);
+        return [event.log, ...filtered];
+      });
+    }
+  };
+
   const updateAppSettings = (args) => {
     setApp((app) => {
       const updated = { ...app, ...args };
@@ -46,7 +57,7 @@ const AppDashboard = () => {
   };
 
   useEffect(() => {
-    socketManager?.start(onAppLoaded, onAppEvent, onAppLogs);
+    socketManager?.start(onAppLoaded, onAppEvent, onAppLogs, onLogEvent);
     return () => {
       socketManager?.stop();
     };
