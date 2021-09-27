@@ -1,51 +1,70 @@
 import { session } from "../context";
 
-export const openMyAppsSocket = (onAppsLoaded, onAppEvent) => {
-  const ws = new WebSocket("ws://localhost:8080/web/apps") || {};
-  const token = session().token;
+const WS_SERVER = "ws://localhost:8080/web";
+const SOCKET_APPS = `${WS_SERVER}/apps`;
+const SOCKET_APPS_DETAIL = `${WS_SERVER}/apps/details`;
+
+export const WSManagerApps = () => {
+  let ws = {};
   var isAuthenticated = false;
+  const token = session().token;
 
-  const messageAuth = (token) => {
-    return {
-      type: "authenticate",
-      token: token,
+  const sendFirstPayload = (token) => {
+    ws.send(
+      // authenticates & requests app
+      JSON.stringify({
+        token: token,
+        messages: [
+          {
+            type: "list_apps",
+          },
+        ],
+      })
+    );
+  };
+
+  const start = (onAppsLoaded, onAppEvent) => {
+    ws = new WebSocket(SOCKET_APPS);
+    ws.onopen = () => {
+      console.log("(socket open)");
+      sendFirstPayload(token);
     };
-  };
-
-  const messageListApps = () => {
-    return {
-      type: "list_apps",
+    ws.onclose = (e) => {
+      console.log("(socket closed): ", e.code, e.reason);
     };
-  };
 
-  ws.onopen = () => {
-    console.log("(socket open)");
-    const payload = [messageAuth(token), messageListApps()];
-    ws.send(JSON.stringify(payload));
-  };
+    ws.onmessage = (e) => {
+      console.log("(socket message): ", e.data);
+      const data = JSON.parse(e.data);
+      const type = data.type;
 
-  ws.onclose = (e) => {
-    console.log("(socket closed): ", e.code, e.reason);
-  };
-
-  ws.onmessage = (e) => {
-    console.log("(socket message): ", e.data);
-
-    const data = JSON.parse(e.data);
-    const type = data.type;
-
-    if (isAuthenticated) {
-      if (type == "apps") {
-        onAppsLoaded(data.apps);
-      } else if (type == "app_event") {
-        onAppEvent(data.event);
+      if (isAuthenticated) {
+        switch (type) {
+          case "apps": {
+            console.log("type apps");
+            onAppsLoaded(data.apps);
+            break;
+          }
+          case "app_event": {
+            console.log("type app event");
+            onAppEvent(data.event);
+            break;
+          }
+        }
+      } else if (type == "authentication_ok") {
+        isAuthenticated = true;
       }
-    } else if (type == "authenticate_ok") {
-      isAuthenticated = true;
-    }
+    };
   };
 
-  return ws;
+  const stop = () => {
+    ws?.close();
+  };
+
+  return {
+    start: start,
+    stop: stop,
+  };
 };
 
 export const WSManagerAppDetails = (appId) => {
@@ -54,7 +73,7 @@ export const WSManagerAppDetails = (appId) => {
   const token = session().token;
 
   const start = (onAppLoaded, onAppEvent, onAppLogs, onLogEvent) => {
-    ws = new WebSocket("ws://localhost:8080/web/apps/details");
+    ws = new WebSocket(SOCKET_APPS_DETAIL);
     ws.onopen = () => {
       console.log("(socket open)");
 

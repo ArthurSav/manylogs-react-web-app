@@ -2,11 +2,13 @@ import { Box, Button, Grid, Heading } from "grommet";
 import AppItem from "../components/AppItem";
 import { useEffect, useState } from "react";
 import SecretMenu from "./SecretMenu";
-import { openMyAppsSocket } from "../api/ManylogsSockets";
+import { WSManagerApps } from "../api/ManylogsSockets";
 import { Link, Redirect } from "react-router-dom";
 
 const MyApps = () => {
   const [apps, setApps] = useState([]);
+  const [socketManager] = useState(() => WSManagerApps());
+
   const onAppsLoaded = (loadedApps) => {
     setApps([...loadedApps]);
   };
@@ -39,9 +41,9 @@ const MyApps = () => {
   };
 
   useEffect(() => {
-    const ws = openMyAppsSocket(onAppsLoaded, onAppEvent);
+    socketManager?.start(onAppsLoaded, onAppEvent);
     return () => {
-      ws.close();
+      socketManager?.stop();
     };
   }, []);
 
