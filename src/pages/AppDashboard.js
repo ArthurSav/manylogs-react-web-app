@@ -37,13 +37,19 @@ const AppDashboard = () => {
   };
 
   const onLogEvent = (event) => {
-    if (event.operation === "insert") {
-      setLogs((logs) => [event.log, ...logs]);
-    } else if (event.operation === "update") {
-      setLogs((logs) => {
-        const filtered = logs.filter((item) => item._id !== event.log._id);
-        return [event.log, ...filtered];
-      });
+    switch (event.operation) {
+      case "insert": {
+        setLogs((logs) => [event.log, ...logs]);
+        break;
+      }
+      case "replace":
+      case "update": {
+        setLogs((logs) => {
+          const filtered = logs.filter((item) => item._id !== event.log._id);
+          return [event.log, ...filtered];
+        });
+        break;
+      }
     }
   };
 
