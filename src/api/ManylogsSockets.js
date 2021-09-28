@@ -72,7 +72,13 @@ export const WSManagerAppDetails = (appId) => {
   var isAuthenticated = false;
   const token = session().token;
 
-  const start = (onAppLoaded, onAppEvent, onAppLogs, onLogEvent) => {
+  const start = (
+    onAppLoaded,
+    onAppEvent,
+    onAppLogs,
+    onLogEvent,
+    onLogItemDetails
+  ) => {
     ws = new WebSocket(SOCKET_APPS_DETAIL);
     ws.onopen = () => {
       console.log("(socket open)");
@@ -103,6 +109,10 @@ export const WSManagerAppDetails = (appId) => {
           }
           case "app_profile_log_event": {
             onLogEvent(data.eventLog);
+            break;
+          }
+          case "log_item_details": {
+            onLogItemDetails(data.logItem);
             break;
           }
         }
@@ -165,14 +175,24 @@ export const WSManagerAppDetails = (appId) => {
       });
     }
 
-    const payload = { messages: messages };
+    ws.send(JSON.stringify({ messages: messages }));
+  };
 
-    ws.send(JSON.stringify(payload));
+  const requestLogItem = (logId) => {
+    const messages = [];
+    messages.push({
+      type: "log_item_details",
+      appId: appId,
+      logId: logId,
+    });
+
+    ws.send(JSON.stringify({ messages: messages }));
   };
 
   return {
     start: start,
     stop: stop,
     updateSettings: requestUpdateSettings,
+    requestLogItem: requestLogItem,
   };
 };

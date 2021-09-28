@@ -20,6 +20,7 @@ const AppDashboard = () => {
   const appId = useParams().id;
   const [app, setApp] = useState();
   const [logs, setLogs] = useState();
+  const [selectedLog, setSelectedLog] = useState();
   const [socketManager] = useState(() => WSManagerAppDetails(appId));
 
   const onAppLoaded = (app) => {
@@ -53,6 +54,10 @@ const AppDashboard = () => {
     }
   };
 
+  const onLogItemDetails = (item) => {
+    setSelectedLog(item);
+  };
+
   const updateAppSettings = (args) => {
     setApp((app) => {
       const updated = { ...app, ...args };
@@ -62,15 +67,35 @@ const AppDashboard = () => {
     });
   };
 
+  // log list item
+  const onListItemClick = (item) => {
+    socketManager?.requestLogItem(item._id);
+  };
+
   useEffect(() => {
-    socketManager?.start(onAppLoaded, onAppEvent, onAppLogs, onLogEvent);
+    socketManager?.start(
+      onAppLoaded,
+      onAppEvent,
+      onAppLogs,
+      onLogEvent,
+      onLogItemDetails
+    );
     return () => {
       socketManager?.stop();
     };
   }, []);
 
   return (
-    <DashboardContext.Provider value={{ app, setApp, updateAppSettings, logs }}>
+    <DashboardContext.Provider
+      value={{
+        app,
+        setApp,
+        updateAppSettings,
+        logs,
+        onListItemClick,
+        selectedLog,
+      }}
+    >
       {app ? (
         <Box
           fill="vertical"
@@ -83,6 +108,7 @@ const AppDashboard = () => {
         >
           <PanelApp key="panelApp" />
           {logs && <PanelLogs key="panelLogs" />}
+          {selectedLog && <PanelLogDetails key="panelLogDetails" />}
         </Box>
       ) : (
         <Text>Loading...</Text>
@@ -231,7 +257,7 @@ const PanelApp = () => {
 };
 
 const PanelLogs = () => {
-  const { logs } = useContext(DashboardContext);
+  const { logs, onListItemClick } = useContext(DashboardContext);
   return (
     <Box
       align="start"
@@ -255,7 +281,9 @@ const PanelLogs = () => {
         flex="grow"
       >
         {logs.map((item) => {
-          return <ListLogItem key={item._id} item={item} />;
+          return (
+            <ListLogItem key={item._id} item={item} onClick={onListItemClick} />
+          );
         })}
       </Box>
     </Box>
@@ -263,12 +291,29 @@ const PanelLogs = () => {
 };
 
 const PanelLogDetails = () => {
+  const { selectedLog } = useContext(DashboardContext);
+  const { request, response } = selectedLog.data;
+
+  const { method, url } = request;
+  const { code } = response;
+
+  const requestHeaders = request.headers;
+  const responseHeaders = response.headers;
+
+  const requestBody = request.body;
+  const responseBody = response.body;
+
+  const urlParsed = new URL(url);
+  const pathName = urlParsed.pathname;
+  console.log("......");
+  console.log(responseBody);
+
   return (
     <Box
       align="start"
       justify="start"
       width="large"
-      height="xlarge"
+      height="large"
       background={{ color: "background-contrast" }}
       round="medium"
       pad="medium"
@@ -292,7 +337,7 @@ const PanelLogDetails = () => {
           background={{ color: "graph-3", opacity: "medium" }}
         >
           <Text weight="bold" size="small">
-            GET
+            {method}
           </Text>
         </Box>
         <Box
@@ -303,7 +348,7 @@ const PanelLogDetails = () => {
           background={{ color: "accent-1", opacity: "medium" }}
         >
           <Text weight="bold" size="small">
-            200
+            {code}
           </Text>
         </Box>
         <Box
@@ -314,9 +359,9 @@ const PanelLogDetails = () => {
           fill="horizontal"
         >
           <Text weight="bold" size="medium">
-            /v1/posts
+            {pathName}
           </Text>
-          <Text size="xsmall">https://www.box.com/v1/posts?id=1</Text>
+          <Text size="xsmall">{url}</Text>
         </Box>
       </Box>
       <Box
@@ -354,10 +399,15 @@ const PanelLogDetails = () => {
             background={{ color: "dark-2" }}
             pad="xsmall"
             round="xsmall"
-            height="xsmall"
+            height="small"
             overflow="auto"
           >
-            <TextArea plain fill size="small" />
+            <TextArea
+              plain
+              fill
+              size="small"
+              value={JSON.stringify(requestHeaders)}
+            />
           </Box>
         </Box>
         <Box align="start" justify="start" fill="horizontal">
@@ -381,7 +431,7 @@ const PanelLogDetails = () => {
             height="small"
             overflow="auto"
           >
-            <TextArea size="small" fill plain />
+            <TextArea size="small" fill plain value={requestBody} />
           </Box>
         </Box>
       </Box>
@@ -427,10 +477,15 @@ const PanelLogDetails = () => {
             background={{ color: "dark-2" }}
             pad="xsmall"
             round="xsmall"
-            height="xsmall"
+            height="small"
             overflow="auto"
           >
-            <TextArea plain fill size="small" />
+            <TextArea
+              plain
+              fill
+              size="small"
+              value={JSON.stringify(responseHeaders)}
+            />
           </Box>
         </Box>
         <Box align="start" justify="start" fill="horizontal">
@@ -445,7 +500,7 @@ const PanelLogDetails = () => {
             align="center"
             justify="center"
             direction="row-responsive"
-            gap="xsmall"
+            gap="small"
             fill="horizontal"
             background={{ color: "dark-2" }}
             pad="xsmall"
@@ -453,7 +508,7 @@ const PanelLogDetails = () => {
             height="small"
             overflow="auto"
           >
-            <TextArea size="small" plain fill />
+            <TextArea size="small" plain fill value={responseBody} />
           </Box>
         </Box>
       </Box>

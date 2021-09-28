@@ -4,6 +4,7 @@ export const ListLogItem = (args) => {
   const { method, code, url } = args.item;
   const urlParsed = new URL(url);
   const pathName = urlParsed.pathname;
+  const onClick = args.onClick;
 
   const statusCodeColor = getStatusColor(code);
 
@@ -17,6 +18,9 @@ export const ListLogItem = (args) => {
       background={{ color: "dark-3" }}
       pad="xsmall"
       round="xsmall"
+      onClick={() => {
+        onClick(args.item);
+      }}
     >
       <Box
         align="center"
