@@ -1,5 +1,7 @@
 import { Box, Text, Select, CheckBox, ThemeContext, Tip } from "grommet";
 import { CircleInformation } from "grommet-icons";
+import { useAppDashboardContext } from "../../pages/app_dashboard/context";
+import CircleStatusIndicator from "../../components/CircleStatusIndicator";
 
 const theme = {
   icon: {
@@ -10,6 +12,8 @@ const theme = {
 };
 
 const PanelAppControls = () => {
+  const state = useAppDashboardContext();
+  const { name, isConnected } = state.app;
   return (
     <Box
       align="start"
@@ -22,13 +26,14 @@ const PanelAppControls = () => {
       pad="small"
       gap="medium"
     >
-      <AppInfo />
+      <AppInfo name={name} isConnected={isConnected} />
       <AppControls />
     </Box>
   );
 };
 
-const AppInfo = () => {
+const AppInfo = ({ name, isConnected }) => {
+  const status = isConnected ? "online" : "offline";
   return (
     <Box
       align="start"
@@ -49,18 +54,11 @@ const AppInfo = () => {
       </Box>
       <Box align="stretch" justify="start" direction="column" gap="xsmall">
         <Text size="large" weight="bold">
-          iphoneXYZiphoneXYZ12
+          {name}
         </Text>
-        <Box align="center" justify="start" direction="row-responsive">
-          <Text size="large">online</Text>
-          <Box
-            align="center"
-            justify="center"
-            background={{ dark: false, color: "accent-1" }}
-            pad="xsmall"
-            round="medium"
-            margin={{ left: "xsmall" }}
-          />
+        <Box align="center" justify="start" direction="row">
+          <Text size="large">{status}</Text>
+          <CircleStatusIndicator isActive={isConnected} />
         </Box>
       </Box>
     </Box>
