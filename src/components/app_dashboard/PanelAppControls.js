@@ -2,6 +2,7 @@ import { Box, Text, Select, CheckBox, ThemeContext, Tip } from "grommet";
 import { CircleInformation } from "grommet-icons";
 import { useAppDashboardContext } from "../../pages/app_dashboard/context";
 import CircleStatusIndicator from "../../components/CircleStatusIndicator";
+import { txtAppDashboard } from "../../assets/text";
 
 const theme = {
   icon: {
@@ -12,8 +13,9 @@ const theme = {
 };
 
 const PanelAppControls = () => {
-  const state = useAppDashboardContext();
-  const { name, isConnected } = state.app;
+  const { app, updateAppSettings } = useAppDashboardContext();
+  const { name, isConnected, isRecordEnabled, isReplayEnabled } = app;
+  const setChecked = (args) => updateAppSettings({ ...args });
   return (
     <Box
       align="start"
@@ -27,7 +29,11 @@ const PanelAppControls = () => {
       gap="medium"
     >
       <AppInfo name={name} isConnected={isConnected} />
-      <AppControls />
+      <AppControls
+        isRecordEnabled={isRecordEnabled}
+        isReplayEnabled={isReplayEnabled}
+        setChecked={setChecked}
+      />
     </Box>
   );
 };
@@ -65,7 +71,11 @@ const AppInfo = ({ name, isConnected }) => {
   );
 };
 
-const AppControls = () => {
+const AppControls = ({ isReplayEnabled, isRecordEnabled, setChecked }) => {
+  const setRecordCheck = (isEnabled) =>
+    setChecked({ isRecordEnabled: isEnabled });
+  const setReplayChecked = (isEnabled) =>
+    setChecked({ isReplayEnabled: isEnabled });
   return (
     <ThemeContext.Extend value={theme}>
       <Box
@@ -93,7 +103,13 @@ const AppControls = () => {
             pad="small"
             round="xsmall"
           >
-            <CheckBox label="Record" toggle reverse />
+            <CheckBox
+              label="Record"
+              toggle
+              reverse
+              checked={isRecordEnabled}
+              onChange={(event) => setRecordCheck(event.target.checked)}
+            />
             <Tip
               plain
               content={
@@ -105,10 +121,8 @@ const AppControls = () => {
                   background="light-2"
                   responsive={false}
                 >
-                  <Text weight="bold">Help</Text>
-                  <Text size="small">
-                    Help is on the way! Who are you going to call?
-                  </Text>
+                  <Text weight="bold">{txtAppDashboard.tipRecordTitle}</Text>
+                  <Text size="small">{txtAppDashboard.tipRecordMessage}</Text>
                 </Box>
               }
               dropProps={{ align: { left: "right" } }}
@@ -124,8 +138,32 @@ const AppControls = () => {
             pad="small"
             round="small"
           >
-            <CheckBox label="Replay" toggle reverse />
-            <CircleInformation size="smallplus" color="light-6" />
+            <CheckBox
+              label="Replay"
+              toggle
+              reverse
+              checked={isReplayEnabled}
+              onChange={(event) => setReplayChecked(event.target.checked)}
+            />
+            <Tip
+              plain
+              content={
+                <Box
+                  pad="small"
+                  gap="small"
+                  width={{ max: "small" }}
+                  round="small"
+                  background="light-2"
+                  responsive={false}
+                >
+                  <Text weight="bold">{txtAppDashboard.tipReplayTitle}</Text>
+                  <Text size="small">{txtAppDashboard.tipReplayMessage}</Text>
+                </Box>
+              }
+              dropProps={{ align: { left: "right" } }}
+            >
+              <CircleInformation size="smallplus" color="light-6" />
+            </Tip>
           </Box>
         </Box>
         <Select

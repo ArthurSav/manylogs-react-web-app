@@ -43,6 +43,17 @@ const AppDashboardContextProvider = ({ children }) => {
   const onLogItemDetails = (item) =>
     dispatch({ type: Action.UpdateSelectedLog, log: item });
 
+  // UI actions
+  const updateAppSettings = (settings) => {
+    const callback = (app, isProfileUpdated) =>
+      socketManager?.updateSettings(app, isProfileUpdated);
+    dispatch({
+      type: Action.UpdateAppSettings,
+      settings: settings,
+      callback: callback,
+    });
+  };
+
   useEffect(() => {
     socketManager?.start(
       onAppLoaded,
@@ -60,6 +71,7 @@ const AppDashboardContextProvider = ({ children }) => {
     <AppDashboardContext.Provider
       value={{
         ...state,
+        updateAppSettings,
       }}
     >
       {children}

@@ -4,12 +4,19 @@ export const Action = {
   InserLog: "LogInsert",
   UpdateLog: "LogUpdate",
   UpdateSelectedLog: "UpdateSelectedLog",
+  UpdateAppSettings: "UpdateAppSettings",
 };
 
 export const reducer = (state, action) => {
   switch (action.type) {
     case Action.UpdateApp:
       return { ...state, app: action.app };
+    case Action.UpdateAppSettings:
+      const updated = { ...state.app, ...action.settings };
+      const isProfileUpdated =
+        state?.app?.activeProfileId !== updated.activeProfileId;
+      action.callback(updated, isProfileUpdated);
+      return { ...state, app: updated };
     case Action.UpdateLogs:
       return { ...state, logs: action.logs };
     case Action.InserLog:

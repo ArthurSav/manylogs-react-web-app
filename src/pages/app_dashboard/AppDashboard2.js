@@ -1,4 +1,4 @@
-import { Box, ResponsiveContext } from "grommet";
+import { Box, ResponsiveContext, Text } from "grommet";
 import PanelDetails from "../../components/app_dashboard/PanelDetails";
 import PanelMain from "../../components/app_dashboard/PanelMain";
 import { AppDashboardContextProvider, useAppDashboardContext } from "./context";
@@ -26,24 +26,30 @@ const AppDashboard = () => {
 };
 
 const DashboardPanels = () => {
-  const { appId, app } = useAppDashboardContext();
-  console.log("app name: " + (app ? app.name : "(empty)"));
-  return (
-    <ResponsiveContext.Consumer>
-      {(size) => (
-        <Box
-          align="stretch"
-          justify="center"
-          direction="row-responsive"
-          gap="small"
-          height={calculatePageContainerHeight(size)}
-        >
-          <PanelMain />
-          <PanelDetails />
-        </Box>
-      )}
-    </ResponsiveContext.Consumer>
-  );
+  const { app } = useAppDashboardContext();
+
+  const view = () => {
+    return (
+      <ResponsiveContext.Consumer>
+        {(size) => (
+          <Box
+            align="stretch"
+            justify="center"
+            direction="row-responsive"
+            gap="small"
+            height={calculatePageContainerHeight(size)}
+          >
+            <PanelMain />
+            <PanelDetails />
+          </Box>
+        )}
+      </ResponsiveContext.Consumer>
+    );
+  };
+  const viewEmpty = () => {
+    return <Text>Loading...</Text>;
+  };
+  return <>{app ? view() : viewEmpty()}</>;
 };
 
 export default AppDashboard;
