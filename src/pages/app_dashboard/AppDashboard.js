@@ -11,8 +11,8 @@ import {
 import { Edit } from "grommet-icons";
 import { useParams } from "react-router";
 import React, { useEffect, useState, useContext } from "react";
-import { WSManagerAppDetails } from "../api/ManylogsSockets";
-import { ListLogItem } from "../components/ListLogItem";
+import { WSManagerAppDashboard } from "../../api/ManylogsSockets";
+import { ListLogItem } from "../../components/ListLogItem";
 
 const DashboardContext = React.createContext();
 
@@ -21,7 +21,7 @@ const AppDashboard = () => {
   const [app, setApp] = useState();
   const [logs, setLogs] = useState();
   const [selectedLog, setSelectedLog] = useState();
-  const [socketManager] = useState(() => WSManagerAppDetails(appId));
+  const [socketManager] = useState(() => WSManagerAppDashboard(appId));
 
   const onAppLoaded = (app) => {
     setApp({ ...app });

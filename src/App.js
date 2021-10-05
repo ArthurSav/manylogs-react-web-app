@@ -5,8 +5,7 @@ import { grommet } from "grommet/themes";
 import Signin from "./pages/Signin";
 import { Switch, Route, Router, Redirect, Link } from "react-router-dom";
 import { createBrowserHistory } from "history";
-import AppDashboard from "./pages/AppDashboard";
-import AppDashboard2 from "./pages/AppDashboard2";
+import AppDashboard from "./pages/app_dashboard/AppDashboard2";
 import { isAuthenticated } from "./context";
 
 const hist = createBrowserHistory();
@@ -30,12 +29,6 @@ function App() {
               exact
               path="/apps"
               render={(props) => <MyApps />}
-              key="apps"
-            />
-            <Route
-              exact
-              path="/app2"
-              render={(props) => <AppDashboard2 />}
               key="apps"
             />
             <Route

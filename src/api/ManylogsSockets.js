@@ -67,7 +67,7 @@ export const WSManagerApps = () => {
   };
 };
 
-export const WSManagerAppDetails = (appId) => {
+export const WSManagerAppDashboard = (appId) => {
   let ws = {};
   var isAuthenticated = false;
   const token = session().token;
@@ -88,7 +88,7 @@ export const WSManagerAppDetails = (appId) => {
     };
 
     ws.onmessage = (e) => {
-      console.log("(socket message): ", e.data);
+      console.log("(socket message type): ", e.data?.type);
 
       const data = JSON.parse(e.data);
       const type = data.type;

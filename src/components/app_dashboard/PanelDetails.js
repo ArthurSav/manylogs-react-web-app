@@ -10,19 +10,6 @@ import {
 } from "grommet";
 import { ListLogItem } from "./PanelAppLogs";
 import { useState } from "react";
-import { grommet } from "grommet/themes";
-
-const colors = {
-  "background-contrast": "#0000000A",
-  text: "#444444",
-  "text-strong": "#000000",
-  "text-weak": "#BBBBBB",
-  border: "#999999",
-  "border-strong": "#666666",
-  "border-weak": "#BBBBBB",
-  "active-background": "background-contrast",
-  "active-text": "text",
-};
 
 const customTheme = {
   tab: {
