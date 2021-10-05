@@ -88,10 +88,10 @@ export const WSManagerAppDashboard = (appId) => {
     };
 
     ws.onmessage = (e) => {
-      console.log("(socket message type): ", e.data?.type);
-
       const data = JSON.parse(e.data);
       const type = data.type;
+
+      console.log("(socket message type): ", type);
 
       if (isAuthenticated) {
         switch (type) {
