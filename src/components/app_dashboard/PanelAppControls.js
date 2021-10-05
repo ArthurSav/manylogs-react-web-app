@@ -3,6 +3,7 @@ import { CircleInformation } from "grommet-icons";
 import { useAppDashboardContext } from "../../pages/app_dashboard/context";
 import CircleStatusIndicator from "../../components/CircleStatusIndicator";
 import { txtAppDashboard } from "../../assets/text";
+import { useState } from "react";
 
 const theme = {
   icon: {
@@ -14,8 +15,28 @@ const theme = {
 
 const PanelAppControls = () => {
   const { app, updateAppSettings } = useAppDashboardContext();
-  const { name, isConnected, isRecordEnabled, isReplayEnabled } = app;
-  const setChecked = (args) => updateAppSettings({ ...args });
+  const {
+    name,
+    isConnected,
+    isRecordEnabled,
+    isReplayEnabled,
+    profiles,
+    activeProfileId,
+  } = app;
+
+  const setRecordEnabled = (isEnabled) =>
+    updateAppSettings({ isRecordEnabled: isEnabled });
+  const setReplayEnabled = (isEnabled) =>
+    updateAppSettings({ isReplayEnabled: isEnabled });
+  const setActiveProfileId = (id) => updateAppSettings({ activeProfileId: id });
+
+  const profileOptions = profiles.map((profile) => {
+    return {
+      label: profile.name,
+      id: profile.id,
+    };
+  });
+
   return (
     <Box
       align="start"
@@ -32,7 +53,10 @@ const PanelAppControls = () => {
       <AppControls
         isRecordEnabled={isRecordEnabled}
         isReplayEnabled={isReplayEnabled}
-        setChecked={setChecked}
+        setRecordEnabled={setRecordEnabled}
+        setReplayEnabled={setReplayEnabled}
+        setActiveProfileId={setActiveProfileId}
+        selectOptions={{ options: profileOptions, selectedId: activeProfileId }}
       />
     </Box>
   );
@@ -71,11 +95,14 @@ const AppInfo = ({ name, isConnected }) => {
   );
 };
 
-const AppControls = ({ isReplayEnabled, isRecordEnabled, setChecked }) => {
-  const setRecordCheck = (isEnabled) =>
-    setChecked({ isRecordEnabled: isEnabled });
-  const setReplayChecked = (isEnabled) =>
-    setChecked({ isReplayEnabled: isEnabled });
+const AppControls = ({
+  isRecordEnabled,
+  isReplayEnabled,
+  setRecordEnabled,
+  setReplayEnabled,
+  setActiveProfileId,
+  selectOptions,
+}) => {
   return (
     <ThemeContext.Extend value={theme}>
       <Box
@@ -108,7 +135,7 @@ const AppControls = ({ isReplayEnabled, isRecordEnabled, setChecked }) => {
               toggle
               reverse
               checked={isRecordEnabled}
-              onChange={(event) => setRecordCheck(event.target.checked)}
+              onChange={(event) => setRecordEnabled(event.target.checked)}
             />
             <Tip
               plain
@@ -143,7 +170,7 @@ const AppControls = ({ isReplayEnabled, isRecordEnabled, setChecked }) => {
               toggle
               reverse
               checked={isReplayEnabled}
-              onChange={(event) => setReplayChecked(event.target.checked)}
+              onChange={(event) => setReplayEnabled(event.target.checked)}
             />
             <Tip
               plain
@@ -167,7 +194,11 @@ const AppControls = ({ isReplayEnabled, isRecordEnabled, setChecked }) => {
           </Box>
         </Box>
         <Select
-          options={["User John", "User Pro", "Another One", "+ Add Profile"]}
+          options={selectOptions.options}
+          labelKey="label"
+          valueKey={{ key: "id", reduce: true }}
+          value={selectOptions.selectedId}
+          onChange={({ value: nextValue }) => setActiveProfileId(nextValue)}
           placeholder="Default Profile"
         />
       </Box>
