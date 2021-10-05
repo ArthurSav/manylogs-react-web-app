@@ -1,7 +1,7 @@
-import { Box, Text, Select } from "grommet";
+import { Box, Text, Select, CheckBox } from "grommet";
 import { CircleInformation } from "grommet-icons";
 
-const CompAppControls = () => {
+const PanelAppControls = () => {
   return (
     <Box
       align="start"
@@ -74,7 +74,7 @@ const CompAppControls = () => {
             round="xsmall"
           >
             <CheckBox label="Record" toggle reverse />
-            <CircleInformation size="small" color="light-6" />
+            <CircleInformation size="medium" color="light-6" />
           </Box>
           <Box
             align="center"
@@ -85,7 +85,7 @@ const CompAppControls = () => {
             round="small"
           >
             <CheckBox label="Replay" toggle reverse />
-            <CircleInformation size="small" color="light-6" />
+            <CircleInformation size="medium" color="light-6" />
           </Box>
         </Box>
         <Select
@@ -96,3 +96,5 @@ const CompAppControls = () => {
     </Box>
   );
 };
+
+export default PanelAppControls;

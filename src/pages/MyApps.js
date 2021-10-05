@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Heading } from "grommet";
-import AppItem from "../components/AppItem";
+import AppListItem from "../components/app_list_overview/AppListItem";
 import { useEffect, useState } from "react";
 import SecretMenu from "./SecretMenu";
 import { WSManagerApps } from "../api/ManylogsSockets";
@@ -65,7 +65,7 @@ const MyApps = () => {
       >
         <Grid gap="large" columns="small">
           {apps.map((app) => {
-            return <AppItem key={app.id} {...app} />;
+            return <AppListItem key={app.id} {...app} />;
           })}
         </Grid>
       </Box>

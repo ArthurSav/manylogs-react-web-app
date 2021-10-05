@@ -1,7 +1,7 @@
 import { Box, Card, Text, Menu } from "grommet";
 import { useHistory } from "react-router-dom";
 
-const AppItem = ({ id, name, isConnected }, onClick) => {
+const AppListItem = ({ id, name, isConnected }, onClick) => {
   const history = useHistory();
   const gotoAppDetails = () => {
     history.push("/apps/" + id);
@@ -72,4 +72,4 @@ const AppItem = ({ id, name, isConnected }, onClick) => {
   );
 };
 
-export default AppItem;
+export default AppListItem;
