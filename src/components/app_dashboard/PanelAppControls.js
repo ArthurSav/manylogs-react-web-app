@@ -1,9 +1,17 @@
-import { Box, Text, Select, CheckBox, ThemeContext, Tip } from "grommet";
-import { CircleInformation } from "grommet-icons";
+import {
+  Box,
+  Text,
+  Select,
+  CheckBox,
+  ThemeContext,
+  Tip,
+  Spinner,
+} from "grommet";
+import { CircleInformation, Add } from "grommet-icons";
 import { useAppDashboardContext } from "../../pages/app_dashboard/context";
-import CircleStatusIndicator from "../../components/CircleStatusIndicator";
+import CircleStatusIndicator from "../CircleStatusIndicator";
 import { txtAppDashboard } from "../../assets/text";
-import { useState } from "react";
+import SelectProfile from "./SelectProfile";
 
 const theme = {
   icon: {
@@ -103,6 +111,15 @@ const AppControls = ({
   setActiveProfileId,
   selectOptions,
 }) => {
+  const onOptionSelected = (id) => setActiveProfileId(id);
+  const onCreateSelected = () => {
+    console.log("Create new profile!");
+  };
+
+  const onDeleteSelected = (id) => {
+    console.log("Delete profile: " + id);
+  };
+
   return (
     <ThemeContext.Extend value={theme}>
       <Box
@@ -193,13 +210,12 @@ const AppControls = ({
             </Tip>
           </Box>
         </Box>
-        <Select
+        <SelectProfile
           options={selectOptions.options}
-          labelKey="label"
-          valueKey={{ key: "id", reduce: true }}
-          value={selectOptions.selectedId}
-          onChange={({ value: nextValue }) => setActiveProfileId(nextValue)}
-          placeholder="Default Profile"
+          selectedId={selectOptions.selectedId}
+          onCreateSelected={onCreateSelected}
+          onOptionSelected={onOptionSelected}
+          onDeleteSelected={onDeleteSelected}
         />
       </Box>
     </ThemeContext.Extend>
