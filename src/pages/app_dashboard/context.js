@@ -8,7 +8,10 @@ import {
 import { Action, reducer } from "./reducer";
 import { useParams } from "react-router";
 import { WSManagerAppDashboard } from "../../api/ManylogsSockets";
-import { postCreateHttpProfile } from "../../api/ManylogsApi";
+import {
+  createHttpProfile as apiCreateProfile,
+  deleteHttpProfile as apiDeleteProfile,
+} from "../../api/ManylogsApi";
 
 const initialState = {};
 
@@ -61,14 +64,25 @@ const AppDashboardContextProvider = ({ children }) => {
       appId: appId,
       name: name,
     };
-    const onCustomSuccess = (profile) => {
-      // todo - update profile
-      onSuccess();
-    };
-    postCreateHttpProfile({
+
+    apiCreateProfile({
       body: body,
       onLoading: onLoading,
-      onSuccess: onCustomSuccess,
+      onSuccess: onSuccess,
+      onError: onError,
+    });
+  };
+
+  const deleteHttpProfile = ({ profileId, onLoading, onSuccess, onError }) => {
+    const body = {
+      appId: appId,
+      profileId: profileId,
+    };
+
+    apiDeleteProfile({
+      body: body,
+      onLoading: onLoading,
+      onSuccess: onSuccess,
       onError: onError,
     });
   };
@@ -92,6 +106,7 @@ const AppDashboardContextProvider = ({ children }) => {
         ...state,
         updateAppSettings,
         createHttpProfile,
+        deleteHttpProfile,
       }}
     >
       {children}

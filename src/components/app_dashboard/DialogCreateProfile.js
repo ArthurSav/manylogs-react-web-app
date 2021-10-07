@@ -12,7 +12,7 @@ import { useState } from "react";
 import { useAppDashboardContext } from "../../pages/app_dashboard/context";
 import { Spinner } from "grommet";
 
-const DialogCreateProfile = ({ onClose, onCreateSuccess }) => {
+const DialogCreateProfile = ({ onClose }) => {
   const [value, setValue] = useState({ name: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -28,7 +28,7 @@ const DialogCreateProfile = ({ onClose, onCreateSuccess }) => {
     }
   };
   const onError = (error) => setError(error);
-  const onSuccess = () => onCreateSuccess();
+  const onSuccess = () => onClose();
   const onLoading = (isLoading) => setLoading(isLoading);
   return (
     <Layer

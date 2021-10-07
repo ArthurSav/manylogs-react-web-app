@@ -51,12 +51,7 @@ export const requestSignin = (email, password, onSuccess, onError) => {
     });
 };
 
-export const postCreateHttpProfile = ({
-  body,
-  onLoading,
-  onSuccess,
-  onError,
-}) => {
+export const createHttpProfile = ({ body, onLoading, onSuccess, onError }) => {
   onLoading(true);
   client
     .post(PATH_APPS_PROFILE, { appId: body.appId, profileName: body.name })
@@ -65,6 +60,24 @@ export const postCreateHttpProfile = ({
       if (response.data) {
         onSuccess(response.data);
       }
+    })
+    .catch((error) => {
+      console.log(error);
+      onError("Something went wrong.");
+    })
+    .finally(() => {
+      onLoading(false);
+    });
+};
+
+export const deleteHttpProfile = ({ body, onLoading, onSuccess, onError }) => {
+  onLoading(true);
+  client
+    .delete(PATH_APPS_PROFILE, {
+      data: { appId: body.appId, profileId: body.profileId },
+    })
+    .then((response) => {
+      onSuccess();
     })
     .catch((error) => {
       console.log(error);

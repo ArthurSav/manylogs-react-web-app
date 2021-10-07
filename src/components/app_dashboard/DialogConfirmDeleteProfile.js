@@ -1,7 +1,24 @@
-import { Layer, Button, Heading, Box, Text } from "grommet";
+import { Layer, Button, Heading, Box, Text, Spinner } from "grommet";
+import { useAppDashboardContext } from "../../pages/app_dashboard/context";
+import { useState } from "react";
 
-const DialogConfirmDeleteProfile = ({ onClose, onAccept, item }) => {
+const DialogConfirmDeleteProfile = ({ onClose, item }) => {
   const { id, label } = item;
+  const [loading, setLoading] = useState(false);
+  const { deleteHttpProfile } = useAppDashboardContext();
+  const onLoading = (isLoading) => setLoading(isLoading);
+  const onDeleteSuccess = () => onClose();
+  const onDeleteError = (error) => console.log(error);
+  const onDeleteAccept = () => {
+    if (!loading) {
+      deleteHttpProfile({
+        profileId: id,
+        onLoading: onLoading,
+        onSuccess: onDeleteSuccess,
+        onError: onDeleteError,
+      });
+    }
+  };
   return (
     <Layer
       id="delete_http_profile"
@@ -28,11 +45,17 @@ const DialogConfirmDeleteProfile = ({ onClose, onAccept, item }) => {
           <Button label="Cancel" onClick={onClose} color="dark-3" />
           <Button
             label={
-              <Text color="white">
-                <strong>Delete</strong>
-              </Text>
+              <>
+                {loading ? (
+                  <Spinner />
+                ) : (
+                  <Text color="white">
+                    <strong>Delete</strong>
+                  </Text>
+                )}
+              </>
             }
-            onClick={() => onAccept(id)}
+            onClick={onDeleteAccept}
             primary
             color="status-critical"
           />
