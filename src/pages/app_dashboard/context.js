@@ -8,6 +8,7 @@ import {
 import { Action, reducer } from "./reducer";
 import { useParams } from "react-router";
 import { WSManagerAppDashboard } from "../../api/ManylogsSockets";
+import { postCreateHttpProfile } from "../../api/ManylogsApi";
 
 const initialState = {};
 
@@ -54,6 +55,24 @@ const AppDashboardContextProvider = ({ children }) => {
     });
   };
 
+  // Http calls
+  const createHttpProfile = ({ name, onLoading, onSuccess, onError }) => {
+    const body = {
+      appId: appId,
+      name: name,
+    };
+    const onCustomSuccess = (profile) => {
+      // todo - update profile
+      onSuccess();
+    };
+    postCreateHttpProfile({
+      body: body,
+      onLoading: onLoading,
+      onSuccess: onCustomSuccess,
+      onError: onError,
+    });
+  };
+
   useEffect(() => {
     socketManager?.start(
       onAppLoaded,
@@ -72,6 +91,7 @@ const AppDashboardContextProvider = ({ children }) => {
       value={{
         ...state,
         updateAppSettings,
+        createHttpProfile,
       }}
     >
       {children}

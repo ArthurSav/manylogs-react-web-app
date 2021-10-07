@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const PATH_SIGNIN = "/signin";
+const PATH_APPS_PROFILE = "/apps/profile";
 
 export const client = axios.create({
   baseURL: "http://www.localhost:8080/api/v1",
@@ -47,5 +48,29 @@ export const requestSignin = (email, password, onSuccess, onError) => {
         else if (code == 400) message = "Invalid data";
         onError(message);
       }
+    });
+};
+
+export const postCreateHttpProfile = ({
+  body,
+  onLoading,
+  onSuccess,
+  onError,
+}) => {
+  onLoading(true);
+  client
+    .post(PATH_APPS_PROFILE, { appId: body.appId, profileName: body.name })
+    .then((response) => {
+      console.log(response);
+      if (response.data) {
+        onSuccess(response.data);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      onError("Something went wrong.");
+    })
+    .finally(() => {
+      onLoading(false);
     });
 };

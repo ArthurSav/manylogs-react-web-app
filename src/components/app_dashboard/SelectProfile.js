@@ -1,6 +1,6 @@
 import { Select, Box, Spinner, Text } from "grommet";
 import { memo, useState } from "react";
-import { Add, Trash, FormClose } from "grommet-icons";
+import { Add, FormClose } from "grommet-icons";
 
 const SelectProfile = ({
   options,
@@ -14,7 +14,7 @@ const SelectProfile = ({
       options={[
         ...options,
         {
-          label: "Create profile",
+          label: "Create http profile",
           id: "create",
         },
       ]}
@@ -22,7 +22,6 @@ const SelectProfile = ({
       name="Select Profile"
       valueKey={{ key: "id", reduce: true }}
       onChange={({ value: id }) => {
-        console.log("OnChange called...");
         if (id === "create") {
           onCreateSelected();
         } else {

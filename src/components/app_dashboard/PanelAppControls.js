@@ -1,17 +1,21 @@
 import {
   Box,
   Text,
-  Select,
+  Layer,
+  Heading,
   CheckBox,
   ThemeContext,
   Tip,
-  Spinner,
+  Button,
 } from "grommet";
 import { CircleInformation, Add } from "grommet-icons";
 import { useAppDashboardContext } from "../../pages/app_dashboard/context";
 import CircleStatusIndicator from "../CircleStatusIndicator";
 import { txtAppDashboard } from "../../assets/text";
 import SelectProfile from "./SelectProfile";
+import { useState } from "react";
+import DialogConfirmDeleteProfile from "./DialogConfirmDeleteProfile";
+import DialogCreateProfile from "./DialogCreateProfile";
 
 const theme = {
   icon: {
@@ -111,17 +115,50 @@ const AppControls = ({
   setActiveProfileId,
   selectOptions,
 }) => {
-  const onOptionSelected = (id) => setActiveProfileId(id);
-  const onCreateSelected = () => {
-    console.log("Create new profile!");
+  const { options, selectedId } = selectOptions;
+
+  // Select Profile Options
+  const onSelectItemChanged = (id) => setActiveProfileId(id);
+  const onSelectItemCreateProfile = () => {
+    onOpenCreateDialog();
+  };
+  const onSelectItemDelete = (id) => {
+    const item = options.find((i) => i.id === id);
+    onOpenDeleteDialog(item);
   };
 
-  const onDeleteSelected = (id) => {
-    console.log("Delete profile: " + id);
+  // Dialog Delete Profile
+  const [dialogDelete, setDialogDelete] = useState();
+  const onOpenDeleteDialog = (item) => setDialogDelete({ item: item });
+  const oncloseDeleteDialog = () => setDialogDelete(undefined);
+  const onItemDeleteConfirm = (id) => {
+    console.log("Delete confirmed!:", id);
+    oncloseDeleteDialog();
+  };
+
+  // dialog Create Http Profile
+  const [dialogCreate, setDialogCreate] = useState();
+  const onCloseCreateDialog = () => setDialogCreate(undefined);
+  const onOpenCreateDialog = () => setDialogCreate(true);
+  const onProfileCreateConfirm = () => {
+    onCloseCreateDialog();
   };
 
   return (
     <ThemeContext.Extend value={theme}>
+      {dialogDelete && (
+        <DialogConfirmDeleteProfile
+          onClose={oncloseDeleteDialog}
+          onAccept={onItemDeleteConfirm}
+          item={dialogDelete.item}
+        />
+      )}
+      {dialogCreate && (
+        <DialogCreateProfile
+          onClose={onCloseCreateDialog}
+          onCreateSuccess={onProfileCreateConfirm}
+        />
+      )}
       <Box
         align="center"
         justify="center"
@@ -211,11 +248,11 @@ const AppControls = ({
           </Box>
         </Box>
         <SelectProfile
-          options={selectOptions.options}
-          selectedId={selectOptions.selectedId}
-          onCreateSelected={onCreateSelected}
-          onOptionSelected={onOptionSelected}
-          onDeleteSelected={onDeleteSelected}
+          options={options}
+          selectedId={selectedId}
+          onCreateSelected={onSelectItemCreateProfile}
+          onOptionSelected={onSelectItemChanged}
+          onDeleteSelected={onSelectItemDelete}
         />
       </Box>
     </ThemeContext.Extend>
