@@ -1,6 +1,27 @@
 import { Box, Text } from "grommet";
+import { useAppDashboardContext } from "../../pages/app_dashboard/context";
+import {
+  formatTimestampDate,
+  getStatusCodeColor,
+  getUrlPath,
+} from "../../util/util";
 
 const PanelAppLogs = () => {
+  const state = useAppDashboardContext();
+  const logs = state.logs || [];
+
+  console.log("Hello logs: ", logs);
+
+  const items = logs.map((log) => {
+    return {
+      id: log._id,
+      method: log.method,
+      code: log.code,
+      url: log.url,
+      timestamp: Number(log.dateUpdated),
+    };
+  });
+
   return (
     <Box
       align="start"
@@ -14,12 +35,18 @@ const PanelAppLogs = () => {
       pad="xsmall"
       fill
     >
-      <ListLogItem />
+      {items.map((i) => {
+        return <ListLogItem key={i.id} {...i} />;
+      })}
     </Box>
   );
 };
 
-export const ListLogItem = () => {
+export const ListLogItem = ({ id, method, code, url, timestamp }) => {
+  const statusColor = getStatusCodeColor(code);
+  const path = getUrlPath(url);
+  let date = formatTimestampDate(timestamp);
+
   return (
     <Box
       align="start"
@@ -48,7 +75,7 @@ export const ListLogItem = () => {
           background={{ color: "graph-3", opacity: "medium" }}
         >
           <Text weight="bold" size="small">
-            GET
+            {method}
           </Text>
         </Box>
         <Box
@@ -56,10 +83,10 @@ export const ListLogItem = () => {
           justify="center"
           pad="small"
           round="xsmall"
-          background={{ color: "accent-1", opacity: "medium" }}
+          background={{ color: statusColor, opacity: "medium" }}
         >
           <Text weight="bold" size="small">
-            200
+            {code}
           </Text>
         </Box>
         <Box
@@ -72,14 +99,14 @@ export const ListLogItem = () => {
           <Box align="center" justify="start" direction="row" width="100%">
             <Box align="start" justify="start" flex="grow">
               <Text weight="bold" size="medium">
-                /v1/posts
+                {path}
               </Text>
             </Box>
             <Text size="xsmall" color="text-weak">
-              2020/10/04 12:12:00+4
+              {date}
             </Text>
           </Box>
-          <Text size="xsmall">https://www.box.com/v1/posts?id=1</Text>
+          <Text size="xsmall">{url}</Text>
         </Box>
       </Box>
     </Box>
