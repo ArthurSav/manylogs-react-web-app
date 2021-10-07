@@ -1,13 +1,4 @@
-import {
-  Box,
-  Text,
-  Layer,
-  Heading,
-  CheckBox,
-  ThemeContext,
-  Tip,
-  Button,
-} from "grommet";
+import { Box, Text, CheckBox, ThemeContext, Tip } from "grommet";
 import { CircleInformation, Add } from "grommet-icons";
 import { useAppDashboardContext } from "../../pages/app_dashboard/context";
 import CircleStatusIndicator from "../CircleStatusIndicator";
@@ -131,34 +122,21 @@ const AppControls = ({
   const [dialogDelete, setDialogDelete] = useState();
   const onOpenDeleteDialog = (item) => setDialogDelete({ item: item });
   const oncloseDeleteDialog = () => setDialogDelete(undefined);
-  const onItemDeleteConfirm = (id) => {
-    console.log("Delete confirmed!:", id);
-    oncloseDeleteDialog();
-  };
 
   // dialog Create Http Profile
   const [dialogCreate, setDialogCreate] = useState();
   const onCloseCreateDialog = () => setDialogCreate(undefined);
   const onOpenCreateDialog = () => setDialogCreate(true);
-  const onProfileCreateConfirm = () => {
-    onCloseCreateDialog();
-  };
 
   return (
     <ThemeContext.Extend value={theme}>
       {dialogDelete && (
         <DialogConfirmDeleteProfile
           onClose={oncloseDeleteDialog}
-          onAccept={onItemDeleteConfirm}
           item={dialogDelete.item}
         />
       )}
-      {dialogCreate && (
-        <DialogCreateProfile
-          onClose={onCloseCreateDialog}
-          onCreateSuccess={onProfileCreateConfirm}
-        />
-      )}
+      {dialogCreate && <DialogCreateProfile onClose={onCloseCreateDialog} />}
       <Box
         align="center"
         justify="center"
