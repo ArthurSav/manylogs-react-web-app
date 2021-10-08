@@ -1,10 +1,11 @@
-import { Box, Text, Paragraph, TextArea, Tabs, Tab, Heading } from "grommet";
+import { Box, Text, TextArea, Tabs, Tab, Heading } from "grommet";
 import { ListLogItem } from "./PanelAppLogs";
 import { useState } from "react";
+import { useAppDashboardContext } from "../../pages/app_dashboard/context";
+import { Select as ImageSelect } from "grommet-icons";
 
 const PanelDetails = () => {
-  const [index, setIndex] = useState(0);
-  const onActive = (nextIndex) => setIndex(nextIndex);
+  const { selectedLog } = useAppDashboardContext();
   return (
     <Box
       align="start"
@@ -16,25 +17,80 @@ const PanelDetails = () => {
       gap="medium"
       direction="column"
       alignSelf="stretch"
-      responsive
     >
-      <ListLogItem />
+      {selectedLog ? <PanelView data={selectedLog} /> : <PanelViewEmpty />}
+    </Box>
+  );
+};
 
+const PanelView = ({ data }) => {
+  // tab index
+  const [index, setIndex] = useState(0);
+  const onActive = (nextIndex) => setIndex(nextIndex);
+
+  // data
+  const http = data.data;
+
+  const info = {
+    id: data._id,
+    method: http.request.method,
+    code: http.response.code,
+    url: http.request.url,
+    timestamp: Number(data.dateUpdated),
+  };
+
+  const request = {
+    headers: JSON.stringify(http.request.headers),
+    body: http.request.body,
+  };
+
+  const response = {
+    headers: JSON.stringify(http.response.headers),
+    body: http.response.body,
+  };
+
+  return (
+    <Box align="start" justify="start" gap="medium" direction="column" fill>
+      <ListLogItem {...info} />
       <Box align="stretch" justify="start" fill>
         <Tabs flex activeIndex={index} justify="start" onActive={onActive}>
           <Tab title="Request">
-            <TabRequestContent />
+            <TabRequestContent request={request} />
           </Tab>
           <Tab title="Response">
-            <TabResponseContent />
+            <TabResponseContent response={response} />
           </Tab>
         </Tabs>
       </Box>
     </Box>
   );
 };
+const PanelViewEmpty = () => {
+  return (
+    <Box
+      align="center"
+      justify="center"
+      width="large"
+      gap="xxsmall"
+      direction="column"
+      fill
+    >
+      <Box pad="small" direction="column" align="center" gap="small">
+        <Box direction="row" gap="xsmall" align="center">
+          <ImageSelect size="medium" />
+          <Text size="small" weight="bold">
+            Select http request
+          </Text>
+        </Box>
+        <Text size="small" textAlign="center">
+          Select a http request to{<br></br>} view details or edit the response.
+        </Text>
+      </Box>
+    </Box>
+  );
+};
 
-const TabRequestContent = () => {
+const TabRequestContent = ({ request }) => {
   return (
     <Box
       align="center"
@@ -58,7 +114,13 @@ const TabRequestContent = () => {
           direction="column"
           height="small"
         >
-          <TextArea fill resize={false} size="small" plain />
+          <TextArea
+            fill
+            resize={false}
+            size="small"
+            plain
+            value={request.headers}
+          />
         </Box>
       </Box>
       <Box align="start" justify="start" direction="column" fill>
@@ -76,14 +138,20 @@ const TabRequestContent = () => {
           fill
           height="100%"
         >
-          <TextArea fill plain resize={false} size="small" />
+          <TextArea
+            fill
+            plain
+            resize={false}
+            size="small"
+            value={request.body}
+          />
         </Box>
       </Box>
     </Box>
   );
 };
 
-const TabResponseContent = () => {
+const TabResponseContent = ({ response }) => {
   return (
     <Box
       align="center"
@@ -107,7 +175,13 @@ const TabResponseContent = () => {
           direction="column"
           height="small"
         >
-          <TextArea fill resize={false} size="small" plain />
+          <TextArea
+            fill
+            resize={false}
+            size="small"
+            plain
+            value={response.headers}
+          />
         </Box>
       </Box>
       <Box align="start" justify="start" direction="column" fill>
@@ -125,7 +199,13 @@ const TabResponseContent = () => {
           fill
           height="100%"
         >
-          <TextArea fill plain resize={false} size="small" />
+          <TextArea
+            fill
+            plain
+            resize={false}
+            size="small"
+            value={response.body}
+          />
         </Box>
       </Box>
     </Box>

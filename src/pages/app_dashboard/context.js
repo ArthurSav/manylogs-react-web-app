@@ -58,6 +58,10 @@ const AppDashboardContextProvider = ({ children }) => {
     });
   };
 
+  const loadLogItemDetails = (id) => {
+    socketManager?.requestLogItem(id);
+  };
+
   // Http calls
   const createHttpProfile = ({ name, onLoading, onSuccess, onError }) => {
     const body = {
@@ -107,6 +111,7 @@ const AppDashboardContextProvider = ({ children }) => {
         updateAppSettings,
         createHttpProfile,
         deleteHttpProfile,
+        loadLogItemDetails,
       }}
     >
       {children}

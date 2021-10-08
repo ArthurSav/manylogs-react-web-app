@@ -9,8 +9,8 @@ import { ThemeContext } from "grommet";
 import { themeContextLogItem } from "../../theme";
 
 const PanelAppLogs = () => {
-  const state = useAppDashboardContext();
-  const logs = state.logs || [];
+  const context = useAppDashboardContext();
+  const logs = context.logs || [];
   const items = logs.map((log) => {
     return {
       id: log._id,
@@ -20,6 +20,7 @@ const PanelAppLogs = () => {
       timestamp: Number(log.dateUpdated),
     };
   });
+  const onItemClick = (id) => context.loadLogItemDetails(id);
 
   return (
     <Box
@@ -34,12 +35,16 @@ const PanelAppLogs = () => {
       pad="xsmall"
       fill
     >
-      {items.length === 0 ? <PanelViewEmpty /> : <PanelView items={items} />}
+      {items.length === 0 ? (
+        <PanelViewEmpty />
+      ) : (
+        <PanelView items={items} onClick={onItemClick} />
+      )}
     </Box>
   );
 };
 
-const PanelView = ({ items }) => {
+const PanelView = ({ items, onClick }) => {
   return (
     <Box
       align="start"
@@ -49,13 +54,7 @@ const PanelView = ({ items }) => {
       direction="column"
     >
       {items.map((i) => {
-        return (
-          <ListLogItem
-            key={i.timestamp}
-            {...i}
-            onClick={() => console.log("clicked")}
-          />
-        );
+        return <ListLogItem key={i.timestamp} {...i} onClick={onClick} />;
       })}
     </Box>
   );
@@ -84,7 +83,7 @@ const PanelViewEmpty = () => {
   );
 };
 
-export const ListLogItem = ({ id, method, code, url, timestamp }) => {
+export const ListLogItem = ({ id, method, code, url, timestamp, onClick }) => {
   const statusColor = getStatusCodeColor(code);
   const path = getUrlPath(url);
   let date = formatTimestampDate(timestamp);
@@ -98,7 +97,9 @@ export const ListLogItem = ({ id, method, code, url, timestamp }) => {
       gap="xxsmall"
       responsive
       flex="grow"
-      onClick={() => console.log("clicked")}
+      onClick={() => {
+        if (onClick) onClick(id);
+      }}
     >
       <Box
         align="center"
