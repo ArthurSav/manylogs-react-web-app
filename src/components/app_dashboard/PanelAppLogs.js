@@ -5,12 +5,12 @@ import {
   getStatusCodeColor,
   getUrlPath,
 } from "../../util/util";
+import { ThemeContext } from "grommet";
+import { customLogTheme } from "../../theme";
 
 const PanelAppLogs = () => {
   const state = useAppDashboardContext();
   const logs = state.logs || [];
-  console.log("Logs ", logs);
-
   const items = logs.map((log) => {
     return {
       id: log._id,
@@ -88,25 +88,27 @@ export const ListLogItem = ({ id, method, code, url, timestamp }) => {
             {code}
           </Text>
         </Box>
-        <Box
-          align="start"
-          justify="start"
-          pad="xsmall"
-          round="small"
-          fill="horizontal"
-        >
-          <Box align="center" justify="start" direction="row" width="100%">
-            <Box align="start" justify="start" flex="grow">
-              <Text weight="bold" size="medium">
-                {path}
+        <ThemeContext.Extend value={customLogTheme}>
+          <Box
+            align="start"
+            justify="start"
+            pad="xsmall"
+            round="small"
+            fill="horizontal"
+          >
+            <Box align="center" justify="start" direction="row" width="100%">
+              <Box align="start" justify="start" flex="grow">
+                <Text weight="bold" size="small">
+                  {path}
+                </Text>
+              </Box>
+              <Text size="xsmall" color="text-weak">
+                {date}
               </Text>
             </Box>
-            <Text size="xsmall" color="text-weak">
-              {date}
-            </Text>
+            <Text size="xsmall">{url}</Text>
           </Box>
-          <Text size="xsmall">{url}</Text>
-        </Box>
+        </ThemeContext.Extend>
       </Box>
     </Box>
   );
