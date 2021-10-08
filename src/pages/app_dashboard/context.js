@@ -34,7 +34,7 @@ const AppDashboardContextProvider = ({ children }) => {
   };
   const onAppLogs = (logs) => dispatch({ type: Action.UpdateLogs, logs: logs });
   const onLogEvent = (event) => {
-    switch (event.type) {
+    switch (event.operation) {
       case "insert":
         dispatch({ type: Action.InserLog, log: event.log });
         break;

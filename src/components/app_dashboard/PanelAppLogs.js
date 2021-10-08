@@ -9,8 +9,7 @@ import {
 const PanelAppLogs = () => {
   const state = useAppDashboardContext();
   const logs = state.logs || [];
-
-  console.log("Hello logs: ", logs);
+  console.log("Logs ", logs);
 
   const items = logs.map((log) => {
     return {
