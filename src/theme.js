@@ -19,21 +19,6 @@ export const mainTheme = deepMerge(grommet, {
   },
 });
 
-const customTheme = {
-  tab: {
-    color: "active-text",
-    active: {
-      color: "accent-1",
-    },
-    border: {
-      color: "active-text",
-      active: {
-        color: "accent-1",
-      },
-    },
-  },
-};
-
 export const themeContextLogItem = {
   text: {
     font: {

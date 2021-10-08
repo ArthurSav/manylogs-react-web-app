@@ -34,9 +34,52 @@ const PanelAppLogs = () => {
       pad="xsmall"
       fill
     >
+      {items.length === 0 ? <PanelViewEmpty /> : <PanelView items={items} />}
+    </Box>
+  );
+};
+
+const PanelView = ({ items }) => {
+  return (
+    <Box
+      align="start"
+      justify="start"
+      width="large"
+      gap="xxsmall"
+      direction="column"
+    >
       {items.map((i) => {
-        return <ListLogItem key={i.id} {...i} />;
+        return (
+          <ListLogItem
+            key={i.timestamp}
+            {...i}
+            onClick={() => console.log("clicked")}
+          />
+        );
       })}
+    </Box>
+  );
+};
+
+const PanelViewEmpty = () => {
+  return (
+    <Box
+      align="center"
+      justify="center"
+      width="large"
+      gap="xxsmall"
+      direction="column"
+      fill
+    >
+      <Text textAlign="center">
+        Connect your app and enable recording
+        {
+          <span>
+            <br></br>
+          </span>
+        }
+        to start seeing http requests here.
+      </Text>
     </Box>
   );
 };
@@ -55,6 +98,7 @@ export const ListLogItem = ({ id, method, code, url, timestamp }) => {
       gap="xxsmall"
       responsive
       flex="grow"
+      onClick={() => console.log("clicked")}
     >
       <Box
         align="center"
