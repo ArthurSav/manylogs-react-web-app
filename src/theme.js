@@ -5,9 +5,36 @@ export const mainTheme = deepMerge(grommet, {
   name: "manylogs",
   defaultMode: "dark",
   global: {},
+  tab: {
+    color: "active-text",
+    active: {
+      color: "accent-1",
+    },
+    border: {
+      color: "active-text",
+      active: {
+        color: "accent-1",
+      },
+    },
+  },
 });
 
-export const customLogTheme = {
+const customTheme = {
+  tab: {
+    color: "active-text",
+    active: {
+      color: "accent-1",
+    },
+    border: {
+      color: "active-text",
+      active: {
+        color: "accent-1",
+      },
+    },
+  },
+};
+
+export const themeContextLogItem = {
   text: {
     font: {
       family: '"Inter"',

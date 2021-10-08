@@ -6,7 +6,7 @@ import {
   getUrlPath,
 } from "../../util/util";
 import { ThemeContext } from "grommet";
-import { customLogTheme } from "../../theme";
+import { themeContextLogItem } from "../../theme";
 
 const PanelAppLogs = () => {
   const state = useAppDashboardContext();
@@ -88,7 +88,7 @@ export const ListLogItem = ({ id, method, code, url, timestamp }) => {
             {code}
           </Text>
         </Box>
-        <ThemeContext.Extend value={customLogTheme}>
+        <ThemeContext.Extend value={themeContextLogItem}>
           <Box
             align="start"
             justify="start"

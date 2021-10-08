@@ -1,30 +1,6 @@
-import {
-  Box,
-  Text,
-  Paragraph,
-  TextArea,
-  Tabs,
-  Tab,
-  Heading,
-  ThemeContext,
-} from "grommet";
+import { Box, Text, Paragraph, TextArea, Tabs, Tab, Heading } from "grommet";
 import { ListLogItem } from "./PanelAppLogs";
 import { useState } from "react";
-
-const customTheme = {
-  tab: {
-    color: "active-text",
-    active: {
-      color: "accent-1",
-    },
-    border: {
-      color: "active-text",
-      active: {
-        color: "accent-1",
-      },
-    },
-  },
-};
 
 const PanelDetails = () => {
   const [index, setIndex] = useState(0);
@@ -45,16 +21,14 @@ const PanelDetails = () => {
       <ListLogItem />
 
       <Box align="stretch" justify="start" fill>
-        <ThemeContext.Extend value={customTheme}>
-          <Tabs flex activeIndex={index} justify="start" onActive={onActive}>
-            <Tab title="Request">
-              <TabRequestContent />
-            </Tab>
-            <Tab title="Response">
-              <TabResponseContent />
-            </Tab>
-          </Tabs>
-        </ThemeContext.Extend>
+        <Tabs flex activeIndex={index} justify="start" onActive={onActive}>
+          <Tab title="Request">
+            <TabRequestContent />
+          </Tab>
+          <Tab title="Response">
+            <TabResponseContent />
+          </Tab>
+        </Tabs>
       </Box>
     </Box>
   );
