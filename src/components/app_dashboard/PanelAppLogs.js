@@ -7,6 +7,7 @@ import {
 } from "../../util/util";
 import { ThemeContext } from "grommet";
 import { themeContextLogItem } from "../../theme";
+import { Action as ImageAction } from "grommet-icons";
 
 const PanelAppLogs = () => {
   const context = useAppDashboardContext();
@@ -70,15 +71,23 @@ const PanelViewEmpty = () => {
       direction="column"
       fill
     >
-      <Text textAlign="center">
-        Connect your app and enable recording
-        {
-          <span>
-            <br></br>
-          </span>
-        }
-        to start seeing http requests here.
-      </Text>
+      <Box pad="small" direction="column" align="center" gap="small">
+        <Box direction="row" gap="xsmall" align="center">
+          <ImageAction size="medium" />
+          <Text size="small" weight="bold">
+            Start recording
+          </Text>
+        </Box>
+        <Text size="small" textAlign="center">
+          Connect your app and enable recording
+          {
+            <span>
+              <br></br>
+            </span>
+          }
+          to start seeing http requests here.
+        </Text>
+      </Box>
     </Box>
   );
 };
