@@ -49,8 +49,11 @@ const AppDashboardContextProvider = ({ children }) => {
 
   // UI actions
   const updateAppSettings = (settings) => {
-    const callback = (app, isProfileUpdated) =>
+    const callback = (app, isProfileUpdated) => {
+      dispatch({ type: Action.UpdateSelectedLog, log: undefined }); // remove selected log item
       socketManager?.updateSettings(app, isProfileUpdated);
+    };
+
     dispatch({
       type: Action.UpdateAppSettings,
       settings: settings,
