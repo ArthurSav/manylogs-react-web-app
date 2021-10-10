@@ -1,10 +1,15 @@
 import { deepMerge } from "grommet/utils";
 import { grommet } from "grommet/themes";
+import { css } from "styled-components";
 
 export const mainTheme = deepMerge(grommet, {
   name: "manylogs",
   defaultMode: "dark",
-  global: {},
+  global: {
+    colors: {
+      "background-json-highlighting": "#2B2B2B",
+    },
+  },
   tab: {
     color: "active-text",
     active: {
@@ -16,6 +21,19 @@ export const mainTheme = deepMerge(grommet, {
         color: "accent-1",
       },
     },
+  },
+  box: {
+    extend: css`
+      &::-webkit-scrollbar {
+        background: #00000000;
+        width: 8px;
+        border-radius: 10px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #999999;
+        border-radius: 4px;
+      }
+    `,
   },
 });
 
