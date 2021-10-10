@@ -11,9 +11,9 @@ export const parseHttpDataToDisplayableContent = (data) => {
   const result = {
     contentType: "",
     headersText: "",
+    headerHighlightLang: "yaml",
+    bodyHighlightLang: "",
     bodyText: body || "",
-    isContentTypeJson: false,
-    isContentTypeHtml: false,
   };
 
   if (headers) {
@@ -24,17 +24,24 @@ export const parseHttpDataToDisplayableContent = (data) => {
       const line = `${key}: ${headers[key]}\n`;
       result.headersText += line;
     }
-    result.isContentTypeJson = isContentTypeJson(result.contentType);
-    result.isContentTypeHtml = isContentTypeHtml(result.contentType);
   }
 
+  const isJson = isContentTypeJson(result.contentType);
+
   // prettify string if Json format
-  if (result.isContentTypeJson && bodyType === "string") {
+  if (isJson && bodyType === "string") {
     try {
       result.bodyText = JSON.stringify(JSON.parse(body), null, 2);
     } catch (e) {
       console.log("Unable to parse body as json: ", e);
     }
+  }
+
+  // code highlighting
+  if (isJson) {
+    result.bodyHighlightLang = "json";
+  } else {
+    result.bodyHighlightLang = "htmlbars";
   }
 
   return result;
