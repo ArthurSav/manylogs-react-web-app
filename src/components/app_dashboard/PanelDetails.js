@@ -61,7 +61,7 @@ const PanelView = ({ data }) => {
 
   return (
     <Box align="start" justify="start" gap="medium" direction="column" fill>
-      <ListLogItem {...info} />
+      <ListLogItem item={info} />
       <Box align="stretch" justify="start" fill>
         <Tabs flex activeIndex={index} justify="start" onActive={onActive}>
           <Tab title="Request">

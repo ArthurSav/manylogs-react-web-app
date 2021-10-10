@@ -21,7 +21,7 @@ const PanelAppLogs = () => {
       timestamp: Number(log.dateUpdated),
     };
   });
-  const onItemClick = (id) => context.loadLogItemDetails(id);
+  const onItemClick = (item) => context.loadLogItemDetails(item.id);
 
   return (
     <Box
@@ -55,7 +55,16 @@ const PanelView = ({ items, onClick }) => {
       direction="column"
     >
       {items.map((i) => {
-        return <ListLogItem key={i.timestamp} {...i} onClick={onClick} />;
+        return (
+          <ListLogItem
+            key={i.timestamp}
+            item={i}
+            onClick={() => {
+              console.log("click: ", i);
+              onClick(i);
+            }}
+          />
+        );
       })}
     </Box>
   );
@@ -92,7 +101,8 @@ const PanelViewEmpty = () => {
   );
 };
 
-export const ListLogItem = ({ id, method, code, url, timestamp, onClick }) => {
+export const ListLogItem = ({ item, onClick }) => {
+  const { id, method, code, url, timestamp } = item;
   const statusColor = getStatusCodeColor(code);
   const path = getUrlPath(url);
   let date = formatTimestampDate(timestamp);
@@ -106,9 +116,7 @@ export const ListLogItem = ({ id, method, code, url, timestamp, onClick }) => {
       gap="xxsmall"
       responsive
       flex="grow"
-      onClick={() => {
-        if (onClick) onClick(id);
-      }}
+      onClick={onClick}
     >
       <Box
         align="center"
