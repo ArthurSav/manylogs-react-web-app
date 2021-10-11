@@ -45,7 +45,13 @@ const AppDashboardContextProvider = ({ children }) => {
     }
   };
   const onLogItemDetails = (item) =>
-    dispatch({ type: Action.UpdateSelectedLog, log: item });
+    dispatch({
+      type: Action.UpdateSelectedLog,
+      log: {
+        full: item,
+        isLoading: false,
+      },
+    });
 
   // UI actions
   const updateAppSettings = (settings) => {
@@ -61,8 +67,13 @@ const AppDashboardContextProvider = ({ children }) => {
     });
   };
 
-  const loadLogItemDetails = (id) => {
-    socketManager?.requestLogItem(id);
+  const loadLogItemDetails = (item) => {
+    dispatch({
+      type: Action.UpdateSelectedLog,
+      log: { preview: item, isLoading: true },
+    });
+
+    socketManager?.requestLogItem(item.id);
   };
 
   // Http calls

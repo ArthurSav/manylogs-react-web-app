@@ -1,4 +1,4 @@
-import { Box, Text, TextArea, Tabs, Tab, Heading } from "grommet";
+import { Box, Text, TextArea, Tabs, Tab, Heading, Spinner } from "grommet";
 import { ListLogItem } from "./PanelAppLogs";
 import { useState } from "react";
 import { useAppDashboardContext } from "../../pages/app_dashboard/context";
@@ -16,6 +16,7 @@ SyntaxHighlighter.registerLanguage("htmlbars", htmlbars);
 
 const PanelDetails = () => {
   const { selectedLog } = useAppDashboardContext();
+  const data = selectedLog ? constructPanelViewData(selectedLog) : {};
   return (
     <Box
       align="start"
@@ -28,47 +29,24 @@ const PanelDetails = () => {
       direction="column"
       alignSelf="stretch"
     >
-      {selectedLog ? <PanelView data={selectedLog} /> : <PanelViewEmpty />}
+      {selectedLog ? <PanelView data={data} /> : <PanelViewEmpty />}
     </Box>
   );
 };
 
 const PanelView = ({ data }) => {
-  // tab index
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(0); // tab index
   const onActive = (nextIndex) => setIndex(nextIndex);
-
-  // data
-  const http = data.data;
-
-  const info = {
-    id: data._id,
-    method: http.request.method,
-    code: http.response.code,
-    url: http.request.url,
-    timestamp: Number(data.dateUpdated),
-  };
-
-  const request = parseHttpDataToDisplayableContent({
-    headers: http.request.headers,
-    body: http.request.body,
-  });
-
-  const response = parseHttpDataToDisplayableContent({
-    headers: http.response.headers,
-    body: http.response.body,
-  });
-
   return (
     <Box align="start" justify="start" gap="medium" direction="column" fill>
-      <ListLogItem item={info} />
+      <ListLogItem item={data.info} />
       <Box align="stretch" justify="start" fill>
         <Tabs flex activeIndex={index} justify="start" onActive={onActive}>
           <Tab title="Request">
-            <TabRequestContent request={request} />
+            <TabRequestContent request={data.request} />
           </Tab>
           <Tab title="Response">
-            <TabResponseContent response={response} />
+            <TabResponseContent response={data.response} />
           </Tab>
         </Tabs>
       </Box>
@@ -250,6 +228,41 @@ const TabResponseContent = ({ response }) => {
       </Box>
     </Box>
   );
+};
+
+const constructPanelViewData = (selectedLog) => {
+  const preview = selectedLog.preview;
+  const full = selectedLog.full;
+
+  const result = {};
+
+  if (full) {
+    const id = full._id;
+    const timestamp = Number(full.dateUpdated);
+    const http = full.data;
+    const info = {
+      id: id,
+      method: http.request.method,
+      code: http.response.code,
+      url: http.request.url,
+      timestamp: timestamp,
+    };
+    result.info = info;
+    result.request = parseHttpDataToDisplayableContent({
+      headers: http.request.headers,
+      body: http.request.body,
+    });
+    result.response = parseHttpDataToDisplayableContent({
+      headers: http.response.headers,
+      body: http.response.body,
+    });
+  } else if (preview) {
+    result.request = parseHttpDataToDisplayableContent({}); // empty data
+    result.response = parseHttpDataToDisplayableContent({}); // empty data
+    result.info = preview;
+  }
+
+  return result;
 };
 
 export default PanelDetails;

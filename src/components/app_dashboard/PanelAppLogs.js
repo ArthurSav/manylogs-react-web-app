@@ -21,7 +21,7 @@ const PanelAppLogs = () => {
       timestamp: Number(log.dateUpdated),
     };
   });
-  const onItemClick = (item) => context.loadLogItemDetails(item.id);
+  const onItemClick = (item) => context.loadLogItemDetails(item);
 
   return (
     <Box
@@ -60,7 +60,6 @@ const PanelView = ({ items, onClick }) => {
             key={i.timestamp}
             item={i}
             onClick={() => {
-              console.log("click: ", i);
               onClick(i);
             }}
           />
