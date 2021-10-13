@@ -1,8 +1,17 @@
-import { Box, Text, TextArea, Tabs, Tab, Heading, Spinner } from "grommet";
+import {
+  Box,
+  Text,
+  TextArea,
+  Tabs,
+  Tab,
+  Heading,
+  Button,
+  Spinner,
+} from "grommet";
 import { ListLogItem } from "./PanelAppLogs";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useAppDashboardContext } from "../../pages/app_dashboard/context";
-import { Select as ImageSelect } from "grommet-icons";
+import { Select as ImageSelect, Edit as ImageEdit } from "grommet-icons";
 
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import json from "react-syntax-highlighter/dist/esm/languages/hljs/json";
@@ -10,6 +19,7 @@ import yaml from "react-syntax-highlighter/dist/esm/languages/hljs/yaml";
 import htmlbars from "react-syntax-highlighter/dist/esm/languages/hljs/htmlbars";
 import darcula from "react-syntax-highlighter/dist/esm/styles/hljs/darcula";
 import { parseHttpDataToDisplayableContent } from "../../util/parsing";
+import { DialogEditResponse } from "./DialogEditResponse";
 SyntaxHighlighter.registerLanguage("json", json);
 SyntaxHighlighter.registerLanguage("yaml", yaml);
 SyntaxHighlighter.registerLanguage("htmlbars", htmlbars);
@@ -36,21 +46,34 @@ const PanelDetails = () => {
 
 const PanelView = ({ data }) => {
   const [index, setIndex] = useState(0); // tab index
+  const [dialog, setDialog] = useState(false);
   const onActive = (nextIndex) => setIndex(nextIndex);
+  const onClose = () => setDialog(false);
+  const onOpen = () => setDialog(true);
   return (
-    <Box align="start" justify="start" gap="medium" direction="column" fill>
-      <ListLogItem item={data.info} />
-      <Box align="stretch" justify="start" fill>
-        <Tabs flex activeIndex={index} justify="start" onActive={onActive}>
-          <Tab title="Request">
-            <TabRequestContent request={data.request} />
-          </Tab>
-          <Tab title="Response">
-            <TabResponseContent response={data.response} />
-          </Tab>
-        </Tabs>
+    <>
+      {dialog && <DialogEditResponse onClose={onClose} data={data} />}
+      <Box align="start" justify="start" gap="medium" direction="column" fill>
+        <ListLogItem item={data.info} />
+        <Box align="stretch" justify="start" fill>
+          <Tabs flex activeIndex={index} justify="start" onActive={onActive}>
+            <Tab title="Request">
+              <TabRequestContent request={data.request} />
+            </Tab>
+            <Tab title="Response">
+              <TabResponseContent response={data.response} />
+            </Tab>
+            <Box round="full" overflow="hidden" background="active-background">
+              <Button
+                icon={<ImageEdit />}
+                hoverIndicator
+                onClick={() => onOpen()}
+              />
+            </Box>
+          </Tabs>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 const PanelViewEmpty = () => {
@@ -89,7 +112,7 @@ const TabRequestContent = ({ request }) => {
       pad={{ top: "medium" }}
     >
       <Box align="start" justify="start" direction="column" fill="horizontal">
-        <Heading size="small" level="4" margin="xsmall">
+        <Heading size="small" level="4" margin="xsmall" color="text-weak">
           Headers
         </Heading>
         <Box
@@ -102,22 +125,12 @@ const TabRequestContent = ({ request }) => {
           height="medium"
           fill="horizontal"
         >
-          <Text size="xsmall">
-            <SyntaxHighlighter
-              style={darcula}
-              language={request.headerHighlightLang}
-              wrapLines={true}
-              wrapLongLines={true}
-              customStyle={{ margin: 6, background: "" }}
-            >
-              {request.headersText}
-            </SyntaxHighlighter>
-          </Text>
+          <CodeBlockRequest data={request} />
         </Box>
       </Box>
       <Box align="start" justify="start" direction="column" fill>
         <Box direction="row" fill="horizontal">
-          <Heading size="small" level="4" margin="xsmall">
+          <Heading size="small" level="4" margin="xsmall" color="text-weak">
             Body
           </Heading>
 
@@ -137,17 +150,7 @@ const TabRequestContent = ({ request }) => {
           fill
           height="100%"
         >
-          <Text size="xsmall">
-            <SyntaxHighlighter
-              style={darcula}
-              language={request.bodyHighlightLang}
-              wrapLines={true}
-              wrapLongLines={true}
-              customStyle={{ margin: 4, background: "" }}
-            >
-              {request.bodyText}
-            </SyntaxHighlighter>
-          </Text>
+          <CodeBlockResponse data={request} />
         </Box>
       </Box>
     </Box>
@@ -165,7 +168,7 @@ const TabResponseContent = ({ response }) => {
       pad={{ top: "medium" }}
     >
       <Box align="start" justify="start" direction="column" fill="horizontal">
-        <Heading size="small" level="4" margin="xsmall">
+        <Heading size="small" level="4" margin="xsmall" color="text-weak">
           Headers
         </Heading>
         <Box
@@ -178,22 +181,12 @@ const TabResponseContent = ({ response }) => {
           height="medium"
           fill="horizontal"
         >
-          <Text size="xsmall">
-            <SyntaxHighlighter
-              style={darcula}
-              language={response.headerHighlightLang}
-              wrapLines={true}
-              wrapLongLines={true}
-              customStyle={{ margin: 6, background: "" }}
-            >
-              {response.headersText}
-            </SyntaxHighlighter>
-          </Text>
+          <CodeBlockRequest data={response} />
         </Box>
       </Box>
       <Box align="start" justify="start" direction="column" fill>
         <Box direction="row" fill="horizontal">
-          <Heading size="small" level="4" margin="xsmall">
+          <Heading size="small" level="4" margin="xsmall" color="text-weak">
             Body
           </Heading>
 
@@ -213,22 +206,40 @@ const TabResponseContent = ({ response }) => {
           fill
           height="100%"
         >
-          <Text size="xsmall">
-            <SyntaxHighlighter
-              style={darcula}
-              language={response.bodyHighlightLang}
-              wrapLines={true}
-              wrapLongLines={true}
-              customStyle={{ margin: 4, background: "" }}
-            >
-              {response.bodyText}
-            </SyntaxHighlighter>
-          </Text>
+          <CodeBlockResponse data={response} />
         </Box>
       </Box>
     </Box>
   );
 };
+
+const CodeBlockRequest = memo(({ data }) => (
+  <Text size="xsmall">
+    <SyntaxHighlighter
+      style={darcula}
+      language={data.headerHighlightLang}
+      wrapLines={true}
+      wrapLongLines={true}
+      customStyle={{ margin: 4, background: "" }}
+    >
+      {data.headersText}
+    </SyntaxHighlighter>
+  </Text>
+));
+
+const CodeBlockResponse = memo(({ data }) => (
+  <Text size="xsmall">
+    <SyntaxHighlighter
+      style={darcula}
+      language={data.bodyHighlightLang}
+      wrapLines={true}
+      wrapLongLines={true}
+      customStyle={{ margin: 4, background: "" }}
+    >
+      {data.bodyText}
+    </SyntaxHighlighter>
+  </Text>
+));
 
 const constructPanelViewData = (selectedLog) => {
   const preview = selectedLog.preview;
