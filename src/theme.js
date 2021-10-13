@@ -2,6 +2,20 @@ import { deepMerge } from "grommet/utils";
 import { grommet } from "grommet/themes";
 import { css } from "styled-components";
 
+// custom css
+const customScrollBar = css`
+  &::-webkit-scrollbar {
+    background: #00000000;
+    width: 8px;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #999999;
+    border-radius: 4px;
+  }
+`;
+
+// main
 export const mainTheme = deepMerge(grommet, {
   name: "manylogs",
   defaultMode: "dark",
@@ -23,20 +37,14 @@ export const mainTheme = deepMerge(grommet, {
     },
   },
   box: {
-    extend: css`
-      &::-webkit-scrollbar {
-        background: #00000000;
-        width: 8px;
-        border-radius: 10px;
-      }
-      &::-webkit-scrollbar-thumb {
-        background: #999999;
-        border-radius: 4px;
-      }
-    `,
+    extend: customScrollBar,
+  },
+  textArea: {
+    extend: customScrollBar,
   },
 });
 
+// extended theme
 export const themeContextLogItem = {
   text: {
     font: {
@@ -46,6 +54,7 @@ export const themeContextLogItem = {
   },
 };
 
+// random
 const theme = {
   name: "dark",
   rounding: 4,
