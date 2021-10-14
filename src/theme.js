@@ -54,6 +54,12 @@ export const themeContextLogItem = {
   },
 };
 
+export const themeContextEditResponse = {
+  formField: {
+    border: false,
+  },
+};
+
 // random
 const theme = {
   name: "dark",
