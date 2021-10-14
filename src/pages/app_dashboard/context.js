@@ -42,20 +42,20 @@ const AppDashboardContextProvider = ({ children }) => {
         break;
       case "replace":
       case "update":
-        dispatch({ type: Action.UpdateLog, log: event.log });
-
-        // Attempts to reload currently selected log
-        const selectedLogId = state.selectedLog?.full?._id;
-        const eventLogItemId = event.log._id;
-        if (selectedLogId === eventLogItemId) {
-          const displayable = convertLightLogToListDisplayable(event.log);
-          loadLogItemDetails(displayable);
-        }
-
+        dispatch({
+          type: Action.UpdateLog,
+          log: event.log,
+          callback: (state) => {
+            // reload selected item, if needed
+            if (state.selectedLog?.full?._id === event.log._id) {
+              socketManager?.requestLogItem(event.log._id);
+            }
+          },
+        });
         break;
     }
   };
-  const onLogItemDetails = (item) =>
+  const onLogItemDetails = (item) => {
     dispatch({
       type: Action.UpdateSelectedLog,
       log: {
@@ -63,6 +63,7 @@ const AppDashboardContextProvider = ({ children }) => {
         isLoading: false,
       },
     });
+  };
 
   // UI actions
   const updateAppSettings = (settings) => {
@@ -84,7 +85,6 @@ const AppDashboardContextProvider = ({ children }) => {
       type: Action.UpdateSelectedLog,
       log: { preview: item, isLoading: true },
     });
-
     socketManager?.requestLogItem(item.id);
   };
 

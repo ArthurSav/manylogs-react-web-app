@@ -5,6 +5,7 @@ export const Action = {
   UpdateLog: "LogUpdate",
   UpdateSelectedLog: "UpdateSelectedLog",
   UpdateAppSettings: "UpdateAppSettings",
+  State: "State",
 };
 
 export const reducer = (state, action) => {
@@ -27,8 +28,12 @@ export const reducer = (state, action) => {
       const filteredLogs = state?.logs.filter(
         (item) => item._id !== updatedItem._id
       );
+      if (action.callback) action.callback(state);
       return { ...state, logs: [updatedItem, ...filteredLogs] };
     case Action.UpdateSelectedLog:
       return { ...state, selectedLog: action.log };
+    case Action.State:
+      action.callback(state);
+      return state;
   }
 };
