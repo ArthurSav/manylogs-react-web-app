@@ -128,29 +128,27 @@ export const WSManagerAppDashboard = (appId) => {
     };
   };
 
-  const stop = () => {
-    ws.close();
-  };
+  const stop = () => ws.close();
+
+  const send = (data) => ws?.send(JSON.stringify(data));
 
   // send
 
   const sendAuthenticate = (token, appId) => {
-    ws.send(
-      // authenticates & requests app
-      JSON.stringify({
-        token: token,
-        messages: [
-          {
-            type: "app",
-            appId: appId,
-          },
-          {
-            type: "app_profile_logs",
-            appId: appId,
-          },
-        ],
-      })
-    );
+    // authenticates & requests app
+    send({
+      token: token,
+      messages: [
+        {
+          type: "app",
+          appId: appId,
+        },
+        {
+          type: "app_profile_logs",
+          appId: appId,
+        },
+      ],
+    });
   };
 
   // update
@@ -175,18 +173,18 @@ export const WSManagerAppDashboard = (appId) => {
       });
     }
 
-    ws.send(JSON.stringify({ messages: messages }));
+    send({ messages: messages });
   };
 
   const requestLogItem = (logId) => {
-    const messages = [];
-    messages.push({
-      type: "log_item_details",
-      appId: appId,
-      logId: logId,
-    });
-
-    ws.send(JSON.stringify({ messages: messages }));
+    const messages = [
+      {
+        type: "log_item_details",
+        appId: appId,
+        logId: logId,
+      },
+    ];
+    send({ messages: messages });
   };
 
   return {

@@ -93,7 +93,6 @@ export const updateProfileLog = ({ body, onSuccess, onError }) => {
   client
     .put(PATH_PROFILE_LOG, body)
     .then((response) => {
-      console.log(response);
       onSuccess();
     })
     .catch((error) => {
