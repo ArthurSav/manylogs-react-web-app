@@ -9,8 +9,10 @@ import {
   Button,
   Spinner,
   TextArea,
+  ThemeContext,
 } from "grommet";
 import { useState } from "react";
+import { themeContextEditResponse } from "../../theme";
 
 export const DialogEditResponse = ({ onClose, data }) => {
   const [value, setValue] = useState({
@@ -38,6 +40,7 @@ export const DialogEditResponse = ({ onClose, data }) => {
         <Heading level={3} margin="none">
           Edit Response
         </Heading>
+
         <Form
           value={value}
           onChange={(nextValue) => {
@@ -49,23 +52,24 @@ export const DialogEditResponse = ({ onClose, data }) => {
           <FormField name="code" error={error} label="code" required>
             <TextInput plain name="code" placeholder="Response code" />
           </FormField>
-          <FormField name="body" error={error}>
-            <Box
-              height="medium"
-              background="background-json-highlighting"
-              pad="xsmall"
-              round="xsmall"
-            >
-              <TextArea
-                size="small"
-                name="body"
-                placeholder="Body"
-                fill
-                plain
-                resize={false}
-              />
-            </Box>
-          </FormField>
+          <ThemeContext.Extend value={themeContextEditResponse}>
+            <FormField name="body" error={error}>
+              <Box
+                height="medium"
+                background="background-json-highlighting"
+                round="xsmall"
+              >
+                <TextArea
+                  size="small"
+                  name="body"
+                  placeholder="Body"
+                  fill
+                  plain
+                  resize={false}
+                />
+              </Box>
+            </FormField>
+          </ThemeContext.Extend>
           <Box
             as="footer"
             gap="small"
