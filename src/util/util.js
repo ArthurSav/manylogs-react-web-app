@@ -50,3 +50,16 @@ export const formatTimestampDate = (timestamp) => {
 
   return "";
 };
+
+/**
+ * @returns true if is valid http status code
+ */
+export const isValidHttpStatusCode = (code) => {
+  try {
+    let value = code;
+    if (typeof value === "string") value = Number(code);
+    return Number.isInteger(value) && value >= 100 && value <= 600;
+  } catch (e) {}
+
+  return false;
+};

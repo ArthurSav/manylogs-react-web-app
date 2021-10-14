@@ -2,6 +2,7 @@ import axios from "axios";
 
 const PATH_SIGNIN = "/signin";
 const PATH_APPS_PROFILE = "/apps/profile";
+const PATH_PROFILE_LOG = "/profile-log";
 
 export const client = axios.create({
   baseURL: "http://www.localhost:8080/api/v1",
@@ -86,4 +87,18 @@ export const deleteHttpProfile = ({ body, onLoading, onSuccess, onError }) => {
     .finally(() => {
       onLoading(false);
     });
+};
+
+export const updateProfileLog = ({ body, onSuccess, onError }) => {
+  client
+    .put(PATH_PROFILE_LOG, body)
+    .then((response) => {
+      console.log(response);
+      onSuccess();
+    })
+    .catch((error) => {
+      console.log(error);
+      onError("Something went wrong.");
+    })
+    .finally(() => {});
 };

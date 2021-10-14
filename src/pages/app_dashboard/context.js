@@ -11,7 +11,9 @@ import { WSManagerAppDashboard } from "../../api/ManylogsSockets";
 import {
   createHttpProfile as apiCreateProfile,
   deleteHttpProfile as apiDeleteProfile,
+  updateProfileLog as apiUpdateProfileLog,
 } from "../../api/ManylogsApi";
+import { convertLightLogToListDisplayable } from "../../util/converters";
 
 const initialState = {};
 
@@ -41,6 +43,15 @@ const AppDashboardContextProvider = ({ children }) => {
       case "replace":
       case "update":
         dispatch({ type: Action.UpdateLog, log: event.log });
+
+        // Attempts to reload currently selected log
+        const selectedLogId = state.selectedLog?.full?._id;
+        const eventLogItemId = event.log._id;
+        if (selectedLogId === eventLogItemId) {
+          const displayable = convertLightLogToListDisplayable(event.log);
+          loadLogItemDetails(displayable);
+        }
+
         break;
     }
   };
@@ -56,7 +67,8 @@ const AppDashboardContextProvider = ({ children }) => {
   // UI actions
   const updateAppSettings = (settings) => {
     const callback = (app, isProfileUpdated) => {
-      dispatch({ type: Action.UpdateSelectedLog, log: undefined }); // remove selected log item
+      if (isProfileUpdated)
+        dispatch({ type: Action.UpdateSelectedLog, log: undefined }); // remove selected log item
       socketManager?.updateSettings(app, isProfileUpdated);
     };
 
@@ -105,6 +117,19 @@ const AppDashboardContextProvider = ({ children }) => {
     });
   };
 
+  /**
+   * Updates profile log response
+   */
+  const updateLogResponse = ({ itemId, response, onSuccess, onError }) => {
+    const body = {
+      appId: appId,
+      profileLogId: itemId,
+      response: response,
+    };
+
+    apiUpdateProfileLog({ body: body, onSuccess: onSuccess, onError: onError });
+  };
+
   useEffect(() => {
     socketManager?.start(
       onAppLoaded,
@@ -126,6 +151,7 @@ const AppDashboardContextProvider = ({ children }) => {
         createHttpProfile,
         deleteHttpProfile,
         loadLogItemDetails,
+        updateLogResponse,
       }}
     >
       {children}

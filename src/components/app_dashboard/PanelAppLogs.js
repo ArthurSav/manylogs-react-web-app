@@ -8,19 +8,12 @@ import {
 import { ThemeContext } from "grommet";
 import { themeContextLogItem } from "../../theme";
 import { Action as ImageAction } from "grommet-icons";
+import { convertLightLogToListDisplayable } from "../../util/converters";
 
 const PanelAppLogs = () => {
   const context = useAppDashboardContext();
   const logs = context.logs || [];
-  const items = logs.map((log) => {
-    return {
-      id: log._id,
-      method: log.method,
-      code: log.code,
-      url: log.url,
-      timestamp: Number(log.dateUpdated),
-    };
-  });
+  const items = logs.map((log) => convertLightLogToListDisplayable(log));
   const onItemClick = (item) => context.loadLogItemDetails(item);
 
   return (

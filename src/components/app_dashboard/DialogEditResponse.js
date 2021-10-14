@@ -12,21 +12,38 @@ import {
   ThemeContext,
 } from "grommet";
 import { useState } from "react";
+import { useAppDashboardContext } from "../../pages/app_dashboard/context";
 import { themeContextEditResponse } from "../../theme";
+import { isValidHttpStatusCode } from "../../util/util";
 
 export const DialogEditResponse = ({ onClose, data }) => {
   const [value, setValue] = useState({
     code: data.info.code,
     body: data.response.bodyText,
   });
+  const { updateLogResponse } = useAppDashboardContext();
+
+  // dialog
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const onError = (error) => setError(error);
   const onSuccess = () => onClose();
   const onLoading = (isLoading) => setLoading(isLoading);
-  const onSubmit = (data) => {
+  const onSubmit = (formData) => {
     if (!loading) {
-      console.log("Submit...");
+      if (!isValidHttpStatusCode(formData.code)) {
+        setError("Http status code should be a value from 100 to 600");
+        return;
+      }
+      updateLogResponse({
+        itemId: data.info.id,
+        response: {
+          code: Number(formData.code),
+          body: formData.body || "",
+        },
+        onSuccess: onSuccess,
+        onError: onError,
+      });
     }
   };
   return (
@@ -53,7 +70,7 @@ export const DialogEditResponse = ({ onClose, data }) => {
             <TextInput plain name="code" placeholder="Response code" />
           </FormField>
           <ThemeContext.Extend value={themeContextEditResponse}>
-            <FormField name="body" error={error}>
+            <FormField name="body">
               <Box
                 height="medium"
                 background="background-json-highlighting"
