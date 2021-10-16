@@ -1,54 +1,26 @@
-import { Box, Avatar, Button, Nav, Sidebar } from "grommet";
-import {
-  Analytics,
-  Chat,
-  Clock,
-  Configure,
-  Help,
-  Projects,
-  StatusInfoSmall,
-} from "grommet-icons";
+import { Box, Button, Nav, Sidebar } from "grommet";
+import { Chat, Projects, UserSettings } from "grommet-icons";
+import { HomeRounded } from "../assets/HomeRounded";
 
 const NavigationBar = () => {
   return (
-    <Sidebar
-      responsive
-      background="dark-2"
-      header={<SidebarHeader />}
-      footer={<SidebarFooter />}
-    >
+    <Sidebar responsive background="dark-2" footer={<SidebarFooter />}>
       <MainNavigation />
     </Sidebar>
   );
 };
 
-const SidebarHeader = () => (
-  <Avatar
-    border={{ size: "small", color: "accent-2" }}
-    background="white"
-    flex={false}
-  >
-    SY
-  </Avatar>
-);
-
 const SidebarFooter = () => (
   <Nav gap="small">
     <Button icon={<Chat />} />
-    <Button icon={<Help />} />
+    <Button icon={<UserSettings />} />
   </Nav>
 );
 
 const MainNavigation = () => (
   <Nav gap="small">
-    <Button icon={<StatusInfoSmall />} />
-    <Button icon={<Projects />} />
-    <Button icon={<Clock />} />
-    <Box pad="small" border={{ color: "white", side: "bottom" }} />
-    <Box gap="small" pad={{ vertical: "medium" }}>
-      <Button icon={<Analytics />} />
-      <Button icon={<Configure />} />
-    </Box>
+    <Button icon={<HomeRounded />} />
+    <Box border={{ color: "white", side: "bottom" }} />
   </Nav>
 );
 
