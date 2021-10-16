@@ -50,7 +50,7 @@ const MyApps = () => {
 
   return (
     <SidebarContainer>
-      <Box flex="grow">
+      <Box flex="grow" pad={{ horizontal: "medium" }}>
         <Heading level={3} margin={{ left: "small" }}>
           My Apps
         </Heading>
