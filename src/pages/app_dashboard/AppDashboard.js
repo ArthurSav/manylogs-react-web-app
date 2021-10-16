@@ -3,23 +3,30 @@ import PanelDetails from "../../components/app_dashboard/PanelDetails";
 import PanelMain from "../../components/app_dashboard/PanelMain";
 import { AppDashboardContextProvider, useAppDashboardContext } from "./context";
 import { calculatePageContainerHeight } from "../../util/util";
+import NavigationBar from "../../components/NavigationBar";
 
 const AppDashboard = () => {
   return (
     <AppDashboardContextProvider>
-      <Box
-        fill="vertical"
-        overflow="auto"
-        align="center"
-        flex="grow"
-        background={{ color: "dark-1" }}
-        justify="start"
-        direction="column"
-        gap="small"
-        pad="medium"
-      >
-        <Box align="center" justify="center" height="xxsmall" />
-        <DashboardPanels />
+      <Box flex="grow" fill="vertical" direction="row">
+        <NavigationBar />
+        <Box
+          // pad={{
+          //   top: "medium",
+          //   left: "medium",
+          //   right: "medium",
+          //   bottom: "medium",
+          // }}
+          pad="medium"
+          overflow="auto"
+          fill
+          align="top"
+          justify="center"
+          direction="row"
+          gap="small"
+        >
+          <DashboardPanels />
+        </Box>
       </Box>
     </AppDashboardContextProvider>
   );

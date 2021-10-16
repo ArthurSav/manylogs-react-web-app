@@ -90,7 +90,9 @@ const AppInfo = ({ name, isConnected }) => {
           {name}
         </Text>
         <Box align="center" justify="start" direction="row">
-          <Text size="large">{status}</Text>
+          <Text size="medium" color="text-weak">
+            {status}
+          </Text>
           <CircleStatusIndicator isActive={isConnected} />
         </Box>
       </Box>

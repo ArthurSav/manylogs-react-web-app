@@ -1,11 +1,11 @@
 import { Box, Card, Text, Menu } from "grommet";
 import { useHistory } from "react-router-dom";
+import CircleStatusIndicator from "../CircleStatusIndicator";
 
 const AppListItem = ({ id, name, isConnected }, onClick) => {
   const history = useHistory();
-  const gotoAppDetails = () => {
-    history.push("/apps/" + id);
-  };
+  const gotoAppDetails = () => history.push("/apps/" + id);
+  const status = isConnected ? "online" : "offline";
   return (
     <Card
       background={{ color: "light-1" }}
@@ -17,7 +17,7 @@ const AppListItem = ({ id, name, isConnected }, onClick) => {
         align="center"
         justify="center"
         pad="small"
-        background={{ color: "neutral-3" }}
+        background={{ color: "light-4" }}
         round="xsmall"
       >
         <Text size="4xl">📱</Text>
@@ -33,20 +33,8 @@ const AppListItem = ({ id, name, isConnected }, onClick) => {
           {name}
         </Text>
         <Box align="center" justify="start" direction="row-responsive">
-          <Text size="medium">{isConnected ? "online" : "offline"}</Text>
-          <Box
-            align="center"
-            justify="center"
-            background={
-              isConnected
-                ? { color: "status-ok" }
-                : { color: "status-disabled" }
-            }
-            pad="xsmall"
-            round="medium"
-            border={{ color: "light-3", size: "xsmall", side: "all" }}
-            margin={{ left: "xsmall" }}
-          />
+          <Text size="medium">{status}</Text>
+          <CircleStatusIndicator isActive={isConnected} />
         </Box>
       </Box>
       <Box align="end" justify="end">

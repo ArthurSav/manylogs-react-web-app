@@ -5,7 +5,7 @@ const CircleStatusIndicator = ({ isActive }) => {
     <Box
       align="center"
       justify="center"
-      background={isActive ? { color: "status-ok" } : { color: "status-error" }}
+      background={isActive ? { color: "status-ok" } : { color: "calm-red" }}
       pad="xsmall"
       round="medium"
       margin={{ left: "xsmall" }}
