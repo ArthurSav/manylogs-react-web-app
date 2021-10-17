@@ -26,7 +26,12 @@ export const mainTheme = deepMerge(grommet, {
         dark: "dark-1",
         light: "light-2",
       },
+      brand: {
+        dark: "#7700cc",
+        light: "#6600cc",
+      },
       "accent-1": "#31ddab",
+      "accent-2": "#621e95",
       "background-json-highlighting": "#2B2B2B",
       "calm-red": "#E57373",
     },

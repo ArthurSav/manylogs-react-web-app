@@ -13,7 +13,7 @@ const hist = createBrowserHistory();
 
 function App() {
   return (
-    <Grommet full theme={mainTheme} themeMode="dark">
+    <Grommet full theme={mainTheme}>
       <Router history={hist}>
         <Switch>
           <Route
