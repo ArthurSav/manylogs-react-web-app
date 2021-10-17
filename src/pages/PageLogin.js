@@ -14,7 +14,7 @@ import { useState } from "react";
 import { requestSignin } from "../api/ManylogsApi";
 import { Redirect } from "react-router-dom";
 import { themeContextLogin } from "../theme";
-import AvatarLogo from "../components/AvatarLogo";
+import { Logo1 } from "../components/Logo";
 
 const PageLogin = () => {
   const [value, setValue] = useState({ email: "", password: "" });
@@ -45,7 +45,7 @@ const PageLogin = () => {
         >
           {authenticated && <Redirect to="/" />}
           <Box align="center" pad={{ bottom: "small" }}>
-            <AvatarLogo />
+            <Logo1 />
             <Heading size="small" level={3}>
               Log in to Manylogs
             </Heading>
