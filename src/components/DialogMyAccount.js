@@ -17,7 +17,7 @@ const DialogMyAccount = ({ onClose }) => {
       onClickOutside={onClose}
       onEsc={onClose}
     >
-      {logout && <Redirect to="/signin" />}
+      {logout && <Redirect to="/login" />}
       <Box pad="medium" gap="small" width="medium">
         <Heading level={3} margin="none">
           Account

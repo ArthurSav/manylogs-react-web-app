@@ -3,7 +3,7 @@ import { useState } from "react";
 import { requestSignin } from "../api/ManylogsApi";
 import { Redirect } from "react-router-dom";
 
-const Signin = () => {
+const PageLogin = () => {
   const [value, setValue] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [authenticated, setAuthenticated] = useState(undefined);
@@ -60,4 +60,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default PageLogin;
