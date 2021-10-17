@@ -5,7 +5,7 @@ const SidebarContainer = ({ children }) => {
   return (
     <Box fill direction="row">
       <NavigationBar />
-      <Main flex="true" align="center" justify="top">
+      <Main align="center" justify="top">
         {children}
       </Main>
     </Box>
