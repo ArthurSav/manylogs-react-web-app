@@ -36,14 +36,14 @@ const PageLogin = () => {
 
   return (
     <ThemeContext.Extend value={themeContextLogin}>
-      <Main align="center" justify="top" pad={{ top: "xlarge" }}>
+      <Main align="center" pad={{ top: "xlarge" }}>
         <Box
           width="xmedium"
           background={{ color: "background-contrast" }}
           round="xsmall"
           pad="40px"
         >
-          {authenticated && <Redirect to="/apps" />}
+          {authenticated && <Redirect to="/" />}
           <Box align="center" pad={{ bottom: "small" }}>
             <AvatarLogo />
             <Heading size="small" level={3}>
