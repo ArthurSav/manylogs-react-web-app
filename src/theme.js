@@ -29,6 +29,17 @@ export const mainTheme = deepMerge(grommet, {
       "background-json-highlighting": "#2B2B2B",
       "calm-red": "#E57373",
     },
+    size: {
+      // xxsmall: "48px",
+      // xsmall: "96px",
+      // small: "192px",
+      // medium: "384px",
+      // large: "768px",
+      // xlarge: "1152px",
+      // xxlarge: "1536px",
+      // full: "100%",
+      xmedium: "450px",
+    },
   },
   tab: {
     color: "active-text",
@@ -71,6 +82,19 @@ export const themeContextLogItem = {
 export const themeContextEditResponse = {
   formField: {
     border: false,
+  },
+};
+
+export const themeContextLogin = {
+  formField: {
+    border: {
+      side: "all",
+    },
+    round: "4px",
+    label: {
+      size: "small",
+      margin: { bottom: "8px", left: "2px" },
+    },
   },
 };
 
