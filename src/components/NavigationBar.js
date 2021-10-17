@@ -15,7 +15,7 @@ const NavigationBar = () => {
 
 const MainNavigation = () => (
   <Nav gap="small">
-    <Link to="/apps">
+    <Link to="/">
       <Button icon={<HomeRounded />} />
     </Link>
     <Box border={{ color: "white", side: "bottom" }} />
