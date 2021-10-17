@@ -41,7 +41,7 @@ const PageLogin = () => {
           width="xmedium"
           background={{ color: "background-contrast" }}
           round="xsmall"
-          pad="large"
+          pad="40px"
         >
           {authenticated && <Redirect to="/apps" />}
           <Box align="center" pad={{ bottom: "small" }}>
@@ -76,7 +76,7 @@ const PageLogin = () => {
             </Box>
           </Form>
           <Box align="center" margin={{ top: "large" }}>
-            <Text size="small">
+            <Text color="text-weak" size="small">
               Don't have an account?
               <Anchor href="/signup"> Sign up</Anchor>
             </Text>
