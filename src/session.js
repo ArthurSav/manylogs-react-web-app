@@ -17,7 +17,7 @@ export const session = () => {
 export const isAuthenticated = () => {
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("userId");
-  return token && id;
+  return (token != undefined && id != undefined) || false;
 };
 
 export const clearUserSession = () => {
