@@ -12,7 +12,7 @@ import {
 } from "grommet";
 import { useState } from "react";
 import { requestSignin } from "../api/ManylogsApi";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { themeContextLogin } from "../theme";
 import AvatarLogo from "../components/AvatarLogo";
 
