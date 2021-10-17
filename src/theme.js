@@ -19,6 +19,7 @@ const customScrollBar = css`
 export const mainTheme = deepMerge(grommet, {
   name: "manylogs",
   defaultMode: "dark",
+  rounding: 6,
   global: {
     colors: {
       background: {
@@ -49,6 +50,11 @@ export const mainTheme = deepMerge(grommet, {
   },
   textArea: {
     extend: customScrollBar,
+  },
+  layer: {
+    border: {
+      radius: "8px",
+    },
   },
 });
 

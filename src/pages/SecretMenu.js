@@ -1,7 +1,7 @@
 import { Box, Menu } from "grommet";
 import { useState } from "react";
 import { Redirect } from "react-router-dom";
-import { clearUserSession } from "../context";
+import { clearUserSession } from "../session";
 
 const SecretMenu = () => {
   const [data, setData] = useState({ logout: false });

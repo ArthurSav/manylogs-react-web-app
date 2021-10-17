@@ -1,4 +1,4 @@
-import { session } from "../context";
+import { session } from "../session";
 
 const WS_SERVER = "ws://localhost:8080/web";
 const SOCKET_APPS = `${WS_SERVER}/apps`;

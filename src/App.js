@@ -5,7 +5,7 @@ import Signin from "./pages/Signin";
 import { Switch, Route, Router, Redirect, Link } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import AppDashboard from "./pages/app_dashboard/AppDashboard";
-import { isAuthenticated } from "./context";
+import { isAuthenticated } from "./session";
 import { mainTheme } from "./theme";
 
 const hist = createBrowserHistory();

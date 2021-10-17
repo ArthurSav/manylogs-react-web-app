@@ -1,4 +1,5 @@
 import axios from "axios";
+import { createSession } from "../session";
 
 const PATH_SIGNIN = "/signin";
 const PATH_APPS_PROFILE = "/apps/profile";
@@ -34,9 +35,7 @@ export const requestSignin = (email, password, onSuccess, onError) => {
     })
     .then((response) => {
       if (response.data) {
-        console.log("Setting authentication data...");
-        localStorage.setItem("userId", response.data.userId);
-        localStorage.setItem("token", response.data.token);
+        createSession(response.data.userId, response.data.token, email);
         onSuccess();
       }
     })
@@ -45,8 +44,7 @@ export const requestSignin = (email, password, onSuccess, onError) => {
         const data = error.response.data;
         const code = error.response.status;
         var message = "Error";
-        if (code == 401) message = "Invalid credentials";
-        else if (code == 400) message = "Invalid data";
+        if (code == 401 || code == 400) message = "Invalid credentials";
         onError(message);
       }
     });

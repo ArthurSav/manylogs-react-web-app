@@ -1,9 +1,16 @@
 export const API_TOKEN = "";
 
+export const createSession = (userId, token, email) => {
+  localStorage.setItem("userId", userId);
+  localStorage.setItem("token", token);
+  localStorage.setItem("email", email);
+};
+
 export const session = () => {
   return {
     id: localStorage.getItem("userId"),
     token: localStorage.getItem("token"),
+    email: localStorage.getItem("email"),
   };
 };
 
