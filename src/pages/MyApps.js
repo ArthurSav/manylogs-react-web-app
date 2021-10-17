@@ -1,9 +1,7 @@
 import { Box, Grid, Heading, ResponsiveContext } from "grommet";
 import AppListItem from "../components/app_list_overview/AppListItem";
 import { useEffect, useState } from "react";
-import SecretMenu from "./SecretMenu";
 import { WSManagerApps } from "../api/ManylogsSockets";
-import { Link, Redirect } from "react-router-dom";
 import SidebarContainer from "../components/SidebarContainer";
 import { calculatePageContainerHeight } from "../util/util";
 
