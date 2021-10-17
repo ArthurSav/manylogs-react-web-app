@@ -1,13 +1,15 @@
-import { Avatar, Box } from "grommet";
+import { Avatar, Box, Image } from "grommet";
 
 const AvatarLogo = () => {
   return (
     <Box
-      pad={{ left: "18px", right: "small", top: "small", bottom: "small" }}
-      background="light-2"
+      pad="small"
+      background="accent-1"
       round="xsmall"
+      height="90px"
+      width="90px"
     >
-      <Avatar size="35px" src="/assets/logo_webclip_256.png" />
+      <Image fill src="/assets/manylogs_logo_2.svg" />
     </Box>
   );
 };
