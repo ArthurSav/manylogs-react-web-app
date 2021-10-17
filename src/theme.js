@@ -38,7 +38,7 @@ export const mainTheme = deepMerge(grommet, {
       // xlarge: "1152px",
       // xxlarge: "1536px",
       // full: "100%",
-      xmedium: "450px",
+      xmedium: "500px",
     },
   },
   tab: {
@@ -94,6 +94,19 @@ export const themeContextLogin = {
     label: {
       size: "small",
       margin: { bottom: "8px", left: "2px" },
+    },
+    error: {
+      margin: { top: "8px", left: "2px" },
+      size: "small",
+    },
+  },
+  button: {
+    border: {
+      radius: "4px",
+    },
+    padding: {
+      vertical: "10px",
+      horizontal: "24px",
     },
   },
 };

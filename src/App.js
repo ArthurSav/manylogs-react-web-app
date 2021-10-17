@@ -1,12 +1,13 @@
 import React from "react";
 import MyApps from "./pages/MyApps";
 import { Grommet } from "grommet";
-import Signin from "./pages/PageLogin";
+import PageLogin from "./pages/PageLogin";
 import { Switch, Route, Router, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import AppDashboard from "./pages/app_dashboard/AppDashboard";
 import { isAuthenticated } from "./session";
 import { mainTheme } from "./theme";
+import PageSignup from "./pages/PageSignup";
 
 const hist = createBrowserHistory();
 
@@ -16,8 +17,13 @@ function App() {
     <Grommet full theme={mainTheme} themeMode="dark">
       <Router history={hist}>
         <Switch>
-          <Route path="/login" render={(props) => <Signin />} key="login" />
+          <Route path="/login" render={(props) => <PageLogin />} key="login" />
           <Route exact path="/apps" render={(props) => <MyApps />} key="apps" />
+          <Route
+            path="/signup"
+            render={(props) => <PageSignup />}
+            key="signup"
+          />
           <Route
             exact
             path="/apps/:id"

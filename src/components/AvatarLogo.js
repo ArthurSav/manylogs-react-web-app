@@ -1,13 +1,13 @@
 import { Avatar, Box } from "grommet";
 
-const AvatarLogo = ({ props }) => {
+const AvatarLogo = () => {
   return (
     <Box
       pad={{ left: "18px", right: "small", top: "small", bottom: "small" }}
       background="light-2"
-      round="small"
+      round="xsmall"
     >
-      <Avatar src="/assets/logo_webclip_256.png" {...props} />
+      <Avatar size="35px" src="/assets/logo_webclip_256.png" />
     </Box>
   );
 };

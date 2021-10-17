@@ -8,11 +8,11 @@ import {
   Main,
   Heading,
   ThemeContext,
-  Stack,
+  Anchor,
 } from "grommet";
 import { useState } from "react";
 import { requestSignin } from "../api/ManylogsApi";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { themeContextLogin } from "../theme";
 import AvatarLogo from "../components/AvatarLogo";
 
@@ -41,8 +41,7 @@ const PageLogin = () => {
           width="xmedium"
           background={{ color: "background-contrast" }}
           round="xsmall"
-          height="500px"
-          pad={{ horizontal: "medium", vertical: "medium" }}
+          pad="large"
         >
           {authenticated && <Redirect to="/apps" />}
           <Box align="center" pad={{ bottom: "small" }}>
@@ -73,9 +72,15 @@ const PageLogin = () => {
             )}
 
             <Box direction="row" justify="center" margin={{ top: "large" }}>
-              <Button type="submit" label="Login" primary />
+              <Button type="submit" label="Login" fill primary />
             </Box>
           </Form>
+          <Box align="center" margin={{ top: "large" }}>
+            <Text size="small">
+              Don't have an account?
+              <Anchor href="/signup"> Sign up</Anchor>
+            </Text>
+          </Box>
         </Box>
       </Main>
     </ThemeContext.Extend>
