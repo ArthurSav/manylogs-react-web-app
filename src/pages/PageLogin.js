@@ -36,7 +36,7 @@ const PageLogin = () => {
 
   return (
     <ThemeContext.Extend value={themeContextLogin}>
-      <Main align="center" pad={{ top: "xlarge" }}>
+      <Main align="center" pad={{ vertical: "100px", horizontal: "large" }}>
         <Box
           width="xmedium"
           background={{ color: "background-contrast" }}
