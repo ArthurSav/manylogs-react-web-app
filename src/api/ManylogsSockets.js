@@ -1,8 +1,8 @@
 import { session } from "../session";
 
-const WS_SERVER = "ws://localhost:8080/web";
-const SOCKET_APPS = `${WS_SERVER}/apps`;
-const SOCKET_APPS_DETAIL = `${WS_SERVER}/apps/details`;
+const HOST = process.env.REACT_APP_WS_ENDPOINT;
+const SOCKET_APPS = `${HOST}/web/apps`;
+const SOCKET_APPS_DETAIL = `${HOST}/web/apps/details`;
 
 export const WSManagerApps = () => {
   let ws = {};

@@ -1,12 +1,13 @@
 import axios from "axios";
 import { createSession } from "../session";
 
+const HOST = process.env.REACT_APP_API_ENDPOINT;
 const PATH_SIGNIN = "/signin";
 const PATH_APPS_PROFILE = "/apps/profile";
 const PATH_PROFILE_LOG = "/profile-log";
 
 export const client = axios.create({
-  baseURL: "http://www.localhost:8080/api/v1",
+  baseURL: `${HOST}/api/v1`,
   timeout: "1000",
   crossDomain: true,
   headers: {
