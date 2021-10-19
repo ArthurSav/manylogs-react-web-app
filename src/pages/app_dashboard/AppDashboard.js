@@ -1,4 +1,4 @@
-import { Box, ResponsiveContext, Sidebar, Text } from "grommet";
+import { Box, ResponsiveContext, Text } from "grommet";
 import PanelDetails from "../../components/app_dashboard/PanelDetails";
 import PanelMain from "../../components/app_dashboard/PanelMain";
 import { AppDashboardContextProvider, useAppDashboardContext } from "./context";
