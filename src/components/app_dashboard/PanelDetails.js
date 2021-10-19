@@ -1,6 +1,6 @@
-import { Box, Text, Tabs, Tab, Heading, Button } from "grommet";
+import { Box, Text, Tabs, Tab, Heading, Button, TextArea } from "grommet";
 import { ListLogItem } from "./PanelAppLogs";
-import { memo, useState } from "react";
+import { memo, useState, useMemo } from "react";
 import { useAppDashboardContext } from "../../pages/app_dashboard/context";
 import { Select as ImageSelect, Edit as ImageEdit } from "grommet-icons";
 
@@ -17,7 +17,9 @@ SyntaxHighlighter.registerLanguage("htmlbars", htmlbars);
 
 const PanelDetails = () => {
   const { selectedLog } = useAppDashboardContext();
-  const data = selectedLog ? constructPanelViewData(selectedLog) : {};
+  const data = useMemo(() => {
+    return selectedLog ? constructPanelViewData(selectedLog) : {};
+  }, [selectedLog]);
   return (
     <Box
       align="start"
@@ -41,6 +43,7 @@ const PanelView = ({ data }) => {
   const onActive = (nextIndex) => setIndex(nextIndex);
   const onClose = () => setDialog(false);
   const onOpen = () => setDialog(true);
+
   return (
     <>
       {dialog && <DialogEditResponse onClose={onClose} data={data} />}
@@ -93,6 +96,12 @@ const PanelViewEmpty = () => {
 };
 
 const TabRequestContent = ({ request }) => {
+  let bodyInfo = undefined;
+  if (request.isBodySizeLarge) {
+    bodyInfo = "File too large";
+  } else if (request.bodySize === 0) {
+    bodyInfo = "Empty";
+  }
   return (
     <Box
       align="center"
@@ -124,7 +133,13 @@ const TabRequestContent = ({ request }) => {
           <Heading size="small" level="4" margin="xsmall" color="text-weak">
             Body
           </Heading>
-
+          {bodyInfo && (
+            <Box justify="center" width="small">
+              <Text size="small" color="text-xweak">
+                ({bodyInfo})
+              </Text>
+            </Box>
+          )}
           <Box fill="horizontal" justify="center" align="end">
             <Text size="small" color="text-xweak">
               {request.contentType}
@@ -149,6 +164,12 @@ const TabRequestContent = ({ request }) => {
 };
 
 const TabResponseContent = ({ response }) => {
+  let bodyInfo = undefined;
+  if (response.isBodySizeLarge) {
+    bodyInfo = "File too large";
+  } else if (response.bodySize === 0) {
+    bodyInfo = "Empty";
+  }
   return (
     <Box
       align="center"
@@ -180,6 +201,13 @@ const TabResponseContent = ({ response }) => {
           <Heading size="small" level="4" margin="xsmall" color="text-weak">
             Body
           </Heading>
+          {bodyInfo && (
+            <Box justify="center" width="small">
+              <Text size="small" color="text-xweak">
+                ({bodyInfo})
+              </Text>
+            </Box>
+          )}
 
           <Box fill="horizontal" justify="center" align="end">
             <Text size="small" color="text-xweak">
@@ -227,7 +255,7 @@ const CodeBlockResponse = memo(({ data }) => (
       wrapLongLines={true}
       customStyle={{ margin: 4, background: "" }}
     >
-      {data.bodyText}
+      {data.isBodySizeLarge ? "" : data.bodyText}
     </SyntaxHighlighter>
   </Text>
 ));

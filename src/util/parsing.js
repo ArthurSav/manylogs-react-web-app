@@ -14,6 +14,8 @@ export const parseHttpDataToDisplayableContent = (data) => {
     headerHighlightLang: "yaml",
     bodyHighlightLang: "",
     bodyText: body || "",
+    bodySize: 0, // bytes
+    isBodySizeLarge: false,
   };
 
   if (headers) {
@@ -28,6 +30,11 @@ export const parseHttpDataToDisplayableContent = (data) => {
 
   const isJson = isContentTypeJson(result.contentType);
 
+  if (body) {
+    result.bodySize = new TextEncoder().encode(body).length;
+    result.isBodySizeLarge = result.bodySize >= 2000000;
+  }
+
   // prettify string if Json format
   if (isJson && bodyType === "string") {
     try {
@@ -37,8 +44,11 @@ export const parseHttpDataToDisplayableContent = (data) => {
     }
   }
 
-  // code highlighting
-  if (isJson) {
+  // highlight language
+  if (result.bodySize >= 500000) {
+    // large bodies cause performance issues.
+    result.bodyHighlightLang = "text";
+  } else if (isJson) {
     result.bodyHighlightLang = "json";
   } else {
     result.bodyHighlightLang = "htmlbars";
