@@ -1,4 +1,4 @@
-import { Avatar, Box, Image } from "grommet";
+import { Box, Image } from "grommet";
 
 export const Logo1 = () => {
   return (

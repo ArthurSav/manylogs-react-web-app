@@ -42,10 +42,10 @@ export const requestSignin = (email, password, onSuccess, onError) => {
     })
     .catch((error) => {
       if (error.response) {
-        const data = error.response.data;
+        // const data = error.response.data;
         const code = error.response.status;
         var message = "Error";
-        if (code == 401 || code == 400) message = "Invalid credentials";
+        if (code === 401 || code === 400) message = "Invalid credentials";
         onError(message);
       }
     });

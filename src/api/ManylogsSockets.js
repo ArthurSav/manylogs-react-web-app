@@ -50,8 +50,11 @@ export const WSManagerApps = () => {
             onAppEvent(data.event);
             break;
           }
+          default: {
+            console.log("Could not handle message type");
+          }
         }
-      } else if (type == "authentication_ok") {
+      } else if (type === "authentication_ok") {
         isAuthenticated = true;
       }
     };

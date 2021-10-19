@@ -1,5 +1,5 @@
-import { Select, Box, Spinner, Text } from "grommet";
-import { memo, useState } from "react";
+import { Select, Box, Text } from "grommet";
+import { memo } from "react";
 import { Add, FormClose } from "grommet-icons";
 
 const SelectProfile = ({
@@ -65,16 +65,5 @@ const Option = memo(({ value, selected, onDeleteClick }) => (
     )}
   </Box>
 ));
-
-const CustomSpinner = () => {
-  return (
-    <Spinner
-      border={[
-        { side: "all", color: "transparent", size: "medium" },
-        { side: "horizontal", color: "brand", size: "medium" },
-      ]}
-    />
-  );
-};
 
 export default SelectProfile;

@@ -1,6 +1,6 @@
 import { Layer, Button, Heading, Box, Text } from "grommet";
 import { session, clearUserSession } from "../session";
-import { useHistory, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { useState } from "react";
 
 const DialogMyAccount = ({ onClose }) => {

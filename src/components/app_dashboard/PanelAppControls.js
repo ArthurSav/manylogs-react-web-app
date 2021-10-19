@@ -1,5 +1,5 @@
 import { Box, Text, CheckBox, ThemeContext, Tip } from "grommet";
-import { CircleInformation, Add } from "grommet-icons";
+import { CircleInformation } from "grommet-icons";
 import { useAppDashboardContext } from "../../pages/app_dashboard/context";
 import CircleStatusIndicator from "../CircleStatusIndicator";
 import { txtAppDashboard } from "../../assets/text";

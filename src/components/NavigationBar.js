@@ -1,4 +1,4 @@
-import { Box, Button, Nav, Sidebar, Heading, Text } from "grommet";
+import { Box, Button, Nav, Sidebar } from "grommet";
 import { UserSettings } from "grommet-icons";
 import { useState } from "react";
 import { Link } from "react-router-dom";

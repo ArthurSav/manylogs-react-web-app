@@ -1,6 +1,6 @@
 import React from "react";
 import MyApps from "./pages/MyApps";
-import { Grommet, Text } from "grommet";
+import { Grommet } from "grommet";
 import PageLogin from "./pages/PageLogin";
 import { Switch, Route, Router, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";

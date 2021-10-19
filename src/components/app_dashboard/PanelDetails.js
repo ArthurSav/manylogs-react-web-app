@@ -1,13 +1,4 @@
-import {
-  Box,
-  Text,
-  TextArea,
-  Tabs,
-  Tab,
-  Heading,
-  Button,
-  Spinner,
-} from "grommet";
+import { Box, Text, Tabs, Tab, Heading, Button } from "grommet";
 import { ListLogItem } from "./PanelAppLogs";
 import { memo, useState } from "react";
 import { useAppDashboardContext } from "../../pages/app_dashboard/context";
