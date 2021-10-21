@@ -1,12 +1,22 @@
 // Main page height responsive height calculation
 
+import { useContext } from "react";
+import { ResponsiveContext } from "grommet";
+
 /**
  * Calculates appropriate height for main page containers
  * @param {*} size
  * @returns
  */
-export const calculatePageContainerHeight = (size) => {
-  return size === "small" || size === "medium" ? "100%" : "xlarge";
+export const calculateMinPageContainerHeight = (size) => {
+  switch (size) {
+    case "small":
+    case "medium":
+    case "large":
+      return "large";
+    default:
+      return "xlarge";
+  }
 };
 
 /**
@@ -63,3 +73,6 @@ export const isValidHttpStatusCode = (code) => {
 
   return false;
 };
+
+// grommet responsive context
+export const useResponsiveContext = () => useContext(ResponsiveContext);

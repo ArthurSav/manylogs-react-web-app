@@ -4,7 +4,7 @@ import PanelAppLogs from "./PanelAppLogs";
 
 const PanelMain = () => {
   return (
-    <Box align="center" justify="center" gap="small">
+    <Box gap="small" width="large">
       <PanelAppControls />
       <PanelAppLogs />
     </Box>

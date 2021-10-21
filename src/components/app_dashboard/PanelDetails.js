@@ -171,20 +171,12 @@ const TabResponseContent = ({ response }) => {
     bodyInfo = "Empty";
   }
   return (
-    <Box
-      align="center"
-      justify="start"
-      fill
-      round="small"
-      gap="large"
-      pad={{ top: "medium" }}
-    >
+    <Box justify="start" fill round="small" gap="large" pad={{ top: "medium" }}>
       <Box align="start" justify="start" direction="column" fill="horizontal">
         <Heading size="small" level="4" margin="xsmall" color="text-weak">
           Headers
         </Heading>
         <Box
-          align="stretch"
           justify="start"
           background={{ color: "background-json-highlighting" }}
           round="xsmall"
@@ -216,7 +208,6 @@ const TabResponseContent = ({ response }) => {
           </Box>
         </Box>
         <Box
-          align="stretch"
           justify="start"
           background={{ color: "background-json-highlighting" }}
           round="xsmall"

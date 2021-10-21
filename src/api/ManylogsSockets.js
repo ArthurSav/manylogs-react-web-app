@@ -9,9 +9,9 @@ export const WSManagerApps = () => {
   var isAuthenticated = false;
   const token = session().token;
 
+  // authenticates & requests app
   const sendFirstPayload = (token) => {
     ws.send(
-      // authenticates & requests app
       JSON.stringify({
         token: token,
         messages: [
@@ -26,27 +26,21 @@ export const WSManagerApps = () => {
   const start = (onAppsLoaded, onAppEvent) => {
     ws = new WebSocket(SOCKET_APPS);
     ws.onopen = () => {
-      console.log("(socket open)");
       sendFirstPayload(token);
-    };
-    ws.onclose = (e) => {
-      console.log("(socket closed): ", e.code, e.reason);
     };
 
     ws.onmessage = (e) => {
-      console.log("(socket message): ", e.data);
+      // console.log("(socket message): ", e.data);
       const data = JSON.parse(e.data);
       const type = data.type;
 
       if (isAuthenticated) {
         switch (type) {
           case "apps": {
-            console.log("type apps");
             onAppsLoaded(data.apps);
             break;
           }
           case "app_event": {
-            console.log("type app event");
             onAppEvent(data.event);
             break;
           }
@@ -84,17 +78,14 @@ export const WSManagerAppDashboard = (appId) => {
   ) => {
     ws = new WebSocket(SOCKET_APPS_DETAIL);
     ws.onopen = () => {
-      console.log("(socket open)");
-
-      // authenticate
-      sendAuthenticate(token, appId);
+      sendAuthenticate(token, appId); // authenticate
     };
 
     ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
       const type = data.type;
 
-      console.log("(socket message type): ", type);
+      // console.log("(socket message type): ", type);
 
       if (isAuthenticated) {
         switch (type) {
@@ -125,10 +116,6 @@ export const WSManagerAppDashboard = (appId) => {
         }
       }
     };
-
-    ws.onclose = (e) => {
-      console.log("(socket closed): ", e.code, e.reason);
-    };
   };
 
   const stop = () => ws.close();
@@ -137,8 +124,8 @@ export const WSManagerAppDashboard = (appId) => {
 
   // send
 
+  // authenticates & requests app
   const sendAuthenticate = (token, appId) => {
-    // authenticates & requests app
     send({
       token: token,
       messages: [

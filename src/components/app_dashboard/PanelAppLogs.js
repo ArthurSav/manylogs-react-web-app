@@ -20,7 +20,6 @@ const PanelAppLogs = () => {
     <Box
       align="start"
       justify="start"
-      width="large"
       round="small"
       gap="xxsmall"
       direction="column"

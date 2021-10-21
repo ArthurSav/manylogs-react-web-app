@@ -3,7 +3,7 @@ import NavigationBar from "./NavigationBar";
 
 const SidebarContainer = ({ children }) => {
   return (
-    <Box fill direction="row">
+    <Box fill flex="grow" direction="row">
       <NavigationBar />
       <Box align="center" justify="start" pad="medium" fill>
         {children}

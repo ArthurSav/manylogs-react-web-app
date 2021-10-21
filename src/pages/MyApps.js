@@ -3,7 +3,6 @@ import AppListItem from "../components/app_list_overview/AppListItem";
 import { useEffect, useState } from "react";
 import { WSManagerApps } from "../api/ManylogsSockets";
 import SidebarContainer from "../components/SidebarContainer";
-import { calculatePageContainerHeight } from "../util/util";
 
 const MyApps = () => {
   const [apps, setApps] = useState([]);
@@ -48,30 +47,28 @@ const MyApps = () => {
 
   return (
     <SidebarContainer>
-      <ResponsiveContext.Consumer>
-        {(size) => (
-          <Box fill="vertical">
-            <Heading level={3} margin={{ left: "small" }}>
-              My Apps
-            </Heading>
-            <Box
-              overflow="auto"
-              pad="large"
-              width="xlarge"
-              height={{ min: "large", max: "100%" }}
-              round="small"
-              background={{ color: "background-contrast" }}
-            >
-              <Grid gap="large" columns="small">
-                {apps.map((app) => {
-                  const timestamp = Date.now();
-                  return <AppListItem key={timestamp} {...app} />;
-                })}
-              </Grid>
-            </Box>
-          </Box>
-        )}
-      </ResponsiveContext.Consumer>
+      <Box fill="vertical">
+        <Heading level={3} margin={{ left: "small" }}>
+          My Apps
+        </Heading>
+        <Box
+          overflow="auto"
+          pad="large"
+          width="xlarge"
+          fill="vertical"
+          height={{
+            min: "large",
+          }}
+          round="small"
+          background={{ color: "background-contrast" }}
+        >
+          <Grid gap="large" columns="small">
+            {apps.map((app) => {
+              return <AppListItem key={app.id} {...app} />;
+            })}
+          </Grid>
+        </Box>
+      </Box>
     </SidebarContainer>
   );
 };

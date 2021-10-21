@@ -42,12 +42,10 @@ const PanelAppControls = () => {
 
   return (
     <Box
-      align="start"
       justify="start"
       background={{ color: "background-contrast" }}
       round="small"
       direction="column"
-      width="large"
       fill="horizontal"
       pad="small"
       gap="medium"
