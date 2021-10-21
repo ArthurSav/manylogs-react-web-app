@@ -48,30 +48,30 @@ const MyApps = () => {
 
   return (
     <SidebarContainer>
-      <Box flex="grow" pad={{ horizontal: "medium" }}>
-        <Heading level={3} margin={{ left: "small" }}>
-          My Apps
-        </Heading>
-        <ResponsiveContext.Consumer>
-          {(size) => (
+      <ResponsiveContext.Consumer>
+        {(size) => (
+          <Box fill="vertical">
+            <Heading level={3} margin={{ left: "small" }}>
+              My Apps
+            </Heading>
             <Box
               overflow="auto"
               pad="large"
-              margin={{ bottom: "medium" }}
               width="xlarge"
-              height={calculatePageContainerHeight(size)}
+              height={{ min: "large", max: "100%" }}
               round="small"
               background={{ color: "background-contrast" }}
             >
               <Grid gap="large" columns="small">
                 {apps.map((app) => {
-                  return <AppListItem key={app.id} {...app} />;
+                  const timestamp = Date.now();
+                  return <AppListItem key={timestamp} {...app} />;
                 })}
               </Grid>
             </Box>
-          )}
-        </ResponsiveContext.Consumer>
-      </Box>
+          </Box>
+        )}
+      </ResponsiveContext.Consumer>
     </SidebarContainer>
   );
 };

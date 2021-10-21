@@ -7,7 +7,13 @@ import DialogMyAccount from "./DialogMyAccount";
 
 const NavigationBar = () => {
   return (
-    <Sidebar responsive={false} background="dark-2" footer={<SidebarFooter />}>
+    <Sidebar
+      align="stretch"
+      responsive={false}
+      flex={false}
+      background="dark-2"
+      footer={<SidebarFooter />}
+    >
       <MainNavigation />
     </Sidebar>
   );
