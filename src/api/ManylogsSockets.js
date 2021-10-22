@@ -4,7 +4,7 @@ const HOST = process.env.REACT_APP_WS_ENDPOINT;
 const SOCKET_APPS = `${HOST}/web/apps`;
 const SOCKET_APPS_DETAIL = `${HOST}/web/apps/details`;
 
-export const WSManagerApps = () => {
+export const WSManagerAppsX = () => {
   let ws = {};
   var isAuthenticated = false;
   const token = session().token;
@@ -57,6 +57,48 @@ export const WSManagerApps = () => {
   const stop = () => {
     ws?.close();
   };
+
+  return {
+    start: start,
+    stop: stop,
+  };
+};
+
+export const WSManagerApps = () => {
+  const manager = WSManager(SOCKET_APPS);
+
+  const start = (onAppsLoaded, onAppEvent) => {
+    const onMessage = (data, type) => {
+      switch (type) {
+        case "apps": {
+          onAppsLoaded(data.apps);
+          break;
+        }
+        case "app_event": {
+          onAppEvent(data.event);
+          break;
+        }
+        default: {
+          console.log("Could not handle message type");
+        }
+      }
+    };
+    manager.setEventHandlers(onMessage);
+
+    sendRequestAppList();
+  };
+
+  const sendRequestAppList = () => {
+    manager.send({
+      messages: [
+        {
+          type: "list_apps",
+        },
+      ],
+    });
+  };
+
+  const stop = () => manager.stop();
 
   return {
     start: start,
