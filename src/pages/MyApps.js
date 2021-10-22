@@ -1,4 +1,4 @@
-import { Box, Grid, Heading, ResponsiveContext } from "grommet";
+import { Box, Grid, Heading } from "grommet";
 import AppListItem from "../components/app_list_overview/AppListItem";
 import { useEffect, useState } from "react";
 import { WSManagerApps } from "../api/ManylogsSockets";
