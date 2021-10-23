@@ -156,12 +156,10 @@ const WSManager = (path) => {
     if (!ws || ws.readyState === 3) {
       ws = new WebSocket(path);
       ws.onopen = () => {
-        console.log("opened socket");
         if (queue.length > 0) sendQueue();
         else authenticate();
       };
       ws.onclose = () => {
-        console.log("closed socket");
         queue = [];
         isAuthenticated = false;
       };
