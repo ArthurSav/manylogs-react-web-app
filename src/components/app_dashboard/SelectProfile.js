@@ -35,13 +35,14 @@ const SelectProfile = ({
           value={option}
           selected={option.id === selectedId}
           onDeleteClick={onDeleteSelected}
+          showDelete={option.id !== "create" && options.length > 1} // At least one prof. required.
         />
       )}
     </Select>
   );
 };
 
-const Option = memo(({ value, selected, onDeleteClick }) => (
+const Option = memo(({ value, selected, onDeleteClick, showDelete }) => (
   <Box
     direction="row"
     gap="small"
@@ -54,7 +55,7 @@ const Option = memo(({ value, selected, onDeleteClick }) => (
     <Box flex="grow" align="start">
       <Text truncate>{value.label}</Text>
     </Box>
-    {value.id !== "create" && (
+    {showDelete && (
       <FormClose
         size="medium"
         onClick={(e) => {
