@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createSession } from "../session";
+import { events } from "../util/analytics";
 
 const HOST = process.env.REACT_APP_API_ENDPOINT;
 const PATH_SIGNIN = "/signin";
@@ -35,12 +36,17 @@ export const requestSignin = (email, password, onSuccess, onError) => {
       password: password,
     })
     .then((response) => {
+      events.login(true);
       if (response.data) {
-        createSession(response.data.userId, response.data.token, email);
+        const userId = response.data.userId;
+        const userToken = response.data.token;
+        createSession(userId, userToken, email);
+        events.identify(userId, email);
         onSuccess();
       }
     })
     .catch((error) => {
+      events.login(false);
       if (error.response) {
         // const data = error.response.data;
         const code = error.response.status;

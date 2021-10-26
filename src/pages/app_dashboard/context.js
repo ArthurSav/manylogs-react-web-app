@@ -13,7 +13,6 @@ import {
   deleteHttpProfile as apiDeleteProfile,
   updateProfileLog as apiUpdateProfileLog,
 } from "../../api/ManylogsApi";
-import { convertLightLogToListDisplayable } from "../../util/converters";
 
 const initialState = {};
 
