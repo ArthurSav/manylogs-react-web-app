@@ -10,11 +10,14 @@ import {
   ThemeContext,
   Anchor,
   Image,
+  Notification,
+  Paragraph,
 } from "grommet";
 import { themeContextLogin } from "../theme";
 import { useState } from "react";
 import { requestSignup } from "../api/ManylogsApi";
 import { Redirect } from "react-router";
+import { StatusCriticalSmall } from "grommet-icons";
 
 const PageSignup = () => {
   return (
@@ -47,17 +50,7 @@ const CompForm = () => {
   const [error, setError] = useState("");
   const [authenticated, setAuthenticated] = useState(undefined);
   const onFormSubmit = (name, email, password) => {
-    requestSignup(
-      name,
-      email,
-      password,
-      () => {
-        setAuthenticated(true);
-      },
-      (e) => {
-        setError(e);
-      }
-    );
+    // do nothing
   };
   return (
     <ThemeContext.Extend value={themeContextLogin}>
@@ -127,6 +120,18 @@ const CompForm = () => {
             >
               <Button type="submit" label="Sign up" fill primary />
               {error && <Text color="status-error">{error}</Text>}
+              <Box
+                margin={{ top: "medium" }}
+                direction="column"
+                align="center"
+                gap="xsmall"
+              >
+                <Box direction="row" fill="horizontal" gap="small">
+                  <StatusCriticalSmall color="orange" />
+                  <Text>Signups are invite only at the moment.</Text>
+                </Box>
+                <Text>Contact info@manylogs.com to request an invite.</Text>
+              </Box>
             </Box>
           </Form>
         </Box>
