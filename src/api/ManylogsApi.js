@@ -4,6 +4,7 @@ import { events } from "../util/analytics";
 
 const HOST = process.env.REACT_APP_API_ENDPOINT;
 const PATH_SIGNIN = "/signin";
+const PATH_SIGNUP = "/signup";
 const PATH_APPS_PROFILE = "/apps/profile";
 const PATH_PROFILE_LOG = "/profile-log";
 
@@ -52,6 +53,53 @@ export const requestSignin = (email, password, onSuccess, onError) => {
         const code = error.response.status;
         var message = "Error";
         if (code === 401 || code === 400) message = "Invalid credentials";
+        onError(message);
+      }
+    });
+};
+
+export const requestSignup = (name, email, password, onSuccess, onError) => {
+  client
+    .post(PATH_SIGNUP, {
+      name: name,
+      email: email,
+      password: password,
+    })
+    .then((response) => {
+      events.signup(true);
+      if (response.data) {
+        const userId = response.data.userId;
+        const userToken = response.data.token;
+        createSession(userId, userToken, email);
+        events.identify(userId, email);
+        onSuccess();
+      }
+    })
+    .catch((error) => {
+      console.log(error.response);
+      events.signup(false);
+      if (error.response) {
+        const data = error.response.data;
+        const code = error.response.status;
+
+        var message = "";
+        switch (data) {
+          case "EMAIL_EXISTS":
+            message = "Email already exists";
+            break;
+          case "EMAIL_INVALID_FORMAT":
+            message = "Invalid email";
+            break;
+          case "FULL_NAME_EMPTY":
+            message = "Name required";
+            break;
+          case "PASSWORD_INVALID_MIN_LIMIT":
+            message = "Password length should be 6 chars or more";
+            break;
+          default:
+            message = "Something went wrong";
+        }
+
         onError(message);
       }
     });

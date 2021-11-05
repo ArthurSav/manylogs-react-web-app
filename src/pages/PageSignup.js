@@ -13,13 +13,15 @@ import {
 } from "grommet";
 import { themeContextLogin } from "../theme";
 import { useState } from "react";
+import { requestSignup } from "../api/ManylogsApi";
+import { Redirect } from "react-router";
 
 const PageSignup = () => {
   return (
-    <Main>
+    <Box direction="column">
       <PageHeader />
       <CompForm />
-    </Main>
+    </Box>
   );
 };
 
@@ -29,8 +31,8 @@ const PageHeader = () => {
       fill="horizontal"
       background="dark-0"
       align="center"
+      justify="center"
       pad="small"
-      // border={{ size: "xsmall", side: "bottom" }}
     >
       <Box width="150px">
         <Image src="/assets/ml_full_logo_color_bg_dark_small.svg" />
@@ -42,11 +44,25 @@ const PageHeader = () => {
 const CompForm = () => {
   const [value, setValue] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
-  const onFormSubmit = (email, password) => {};
+  const [authenticated, setAuthenticated] = useState(undefined);
+  const onFormSubmit = (name, email, password) => {
+    requestSignup(
+      name,
+      email,
+      password,
+      () => {
+        setAuthenticated(true);
+      },
+      (e) => {
+        setError(e);
+      }
+    );
+  };
   return (
     <ThemeContext.Extend value={themeContextLogin}>
       <Box align="center" pad="large">
         <Box width="xmedium" round="xsmall" pad="40px">
+          {authenticated && <Redirect to="/" />}
           <Box align="center" pad={{ bottom: "medium" }}>
             <Heading size="small" level={2} margin="small">
               Create your Free Account
@@ -60,7 +76,7 @@ const CompForm = () => {
             value={value}
             onChange={(nextValue) => setValue(nextValue)}
             onSubmit={({ value: nextValue }) =>
-              onFormSubmit(nextValue.email, nextValue.password)
+              onFormSubmit(nextValue.name, nextValue.email, nextValue.password)
             }
           >
             <FormField label="Name *" name="name" required>
@@ -81,7 +97,18 @@ const CompForm = () => {
               />
             </FormField>
 
-            <FormField label="Create a password *" name="password" required>
+            <FormField
+              label="Create a password *"
+              name="password"
+              required
+              validate={[
+                (password) => {
+                  if (password && password.length < 6)
+                    return "6 or more chars required";
+                  return undefined;
+                },
+              ]}
+            >
               <TextInput
                 name="password"
                 type="password"
