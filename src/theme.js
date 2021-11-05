@@ -115,6 +115,11 @@ export const themeContextLogin = {
       horizontal: "24px",
     },
   },
+  textInput: {
+    extend: () => `
+      font-weight: 400;
+    `,
+  },
 };
 
 // examples
