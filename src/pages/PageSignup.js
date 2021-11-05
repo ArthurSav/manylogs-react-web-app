@@ -33,6 +33,7 @@ const PageHeader = () => {
       align="center"
       justify="center"
       pad="small"
+      height="80px"
     >
       <Box width="150px">
         <Image src="/assets/ml_full_logo_color_bg_dark_small.svg" />
