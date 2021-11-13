@@ -75,12 +75,12 @@ const PageLogin = () => {
               <Button type="submit" label="Login" fill primary />
             </Box>
           </Form>
-          <Box align="center" margin={{ top: "large" }}>
+          {/* <Box align="center" margin={{ top: "large" }}>
             <Text color="text-weak" size="small">
               Don't have an account?
               <Anchor href="/signup"> Sign up</Anchor>
             </Text>
-          </Box>
+          </Box> */}
         </Box>
       </Main>
     </ThemeContext.Extend>
