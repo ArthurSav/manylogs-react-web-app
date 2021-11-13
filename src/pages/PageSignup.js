@@ -10,12 +10,9 @@ import {
   ThemeContext,
   Anchor,
   Image,
-  Notification,
-  Paragraph,
 } from "grommet";
 import { themeContextLogin } from "../theme";
 import { useState } from "react";
-import { requestSignup } from "../api/ManylogsApi";
 import { Redirect } from "react-router";
 import { StatusCriticalSmall } from "grommet-icons";
 
